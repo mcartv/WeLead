@@ -187,27 +187,36 @@ function Home({ sectionRefs, introRef, user }) {
 
         <div className="reviews-grid">
           <div className="review-card">
-            <p>
-              "LEADS transformed our ideas into reality. The team’s attention to detail
-              and creativity is unmatched. Highly recommended!"
-            </p>
-            <h4>— Maria Santos, CEO of BuildWise</h4>
+            <img src="/images/De Serra.jfif" alt="AC De Serra" className="review-avatar" />
+            <div className="review-content">
+              <p>
+                "LEADS transformed our ideas into reality. The team’s attention to detail
+                and creativity is unmatched. Highly recommended!"
+              </p>
+              <h4>— Althea Carmela De Serra, CEO of BuildWise</h4>
+            </div>
           </div>
 
           <div className="review-card">
-            <p>
-              "Professional, reliable, and innovative. The designs exceeded our expectations
-              and the process was seamless."
-            </p>
-            <h4>— Jonathan Cruz, Property Developer</h4>
+            <img src="/images/Sanico.jfif" alt="Ian Sanico" className="review-avatar" />
+            <div className="review-content">
+              <p>
+                "Professional, reliable, and innovative. The designs exceeded our expectations
+                and the process was seamless."
+              </p>
+              <h4>— Ian George Sanico, Property Developer</h4>
+            </div>
           </div>
 
           <div className="review-card">
-            <p>
-              "Working with LEADS was an incredible experience. They listened to our vision
-              and turned it into a functional, stunning reality."
-            </p>
-            <h4>— Angela Tan, Interior Designer</h4>
+            <img src="/images/Santiago.png" alt="Miguel Santiago" className="review-avatar" />
+            <div className="review-content">
+              <p>
+                "Working with LEADS was an incredible experience. They listened to our vision
+                and turned it into a functional, stunning reality."
+              </p>
+              <h4>— Dominic Miguel Santiago, Interior Designer</h4>
+            </div>
           </div>
         </div>
       </section>
