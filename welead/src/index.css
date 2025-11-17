@@ -1,0 +1,43 @@
+/* Logo animation */
+.logo-animated {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  transition: all 1s ease;
+  z-index: 10000;
+}
+
+.logo-animated.move-to-corner {
+  top: 20px;
+  left: 40px;
+  transform: translate(0, 0);
+  font-size: 20px;
+}
+
+/* Hide hamburger until in corner */
+.logo-animated .hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.logo-animated.menu-icon .logo-text {
+  display: none;
+}
+
+.logo-animated.menu-icon .hamburger {
+  display: flex;
+}
+
+.logo-animated .hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #111;
+  border-radius: 2px;
+}

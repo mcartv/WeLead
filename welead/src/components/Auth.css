@@ -1,0 +1,482 @@
+/* ============================ */
+/* ===== GLOBAL STYLES ======== */
+/* ============================ */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Overcame', sans-serif;
+    background-color: #121317;
+    color: #e0e0e0;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+#leads {
+    font-family: 'Overcame', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #c8a058;
+    background-color: #1e1f25;
+    margin: 0 20px 30px;
+}
+
+/* ===== PASSWORD CONTAINER & OPTIONS ===== */
+.password-container {
+    font-family: 'Metropolis', sans-serif;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.password-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 1rem;
+}
+
+.password-options label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: #e0e0e0;
+}
+
+.password-options input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.forgot-password-link {
+    color: #c8a058;
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+}
+
+.forgot-password-link:hover {
+    opacity: 0.7;
+}
+
+
+
+
+
+
+/* ============================ */
+/* ===== LOGIN PAGE CONTAINER === */
+/* ============================ */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #1a1b21 100%);
+}
+
+.auth-container {
+    background-color: #1e1f25;
+    padding: 60px 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    position: relative;
+}
+
+/* ============================ */
+/* ===== FORM ELEMENTS ======== */
+/* ============================ */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-form input {
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #121317;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #c8a058;
+    box-shadow: 0 0 6px rgba(200, 160, 88, 0.6);
+    background-color: #1e1f25;
+    color: #e0e0e0;
+}
+
+/* ============================ */
+/* ===== SHOW PASSWORD BUTTON === */
+/* ============================ */
+.show-password-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    color: #c8a058;
+    cursor: pointer;
+    user-select: none;
+}
+
+.show-password-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ============================ */
+/* ===== BUTTONS ============== */
+/* ============================ */
+.auth-form button {
+    padding: 0 16px 15px;
+    border-radius: 6px;
+    background: #c8a058;
+    border: none;
+    color: #121317;
+    font-weight: 500;
+    font-size: 1.45rem;
+    transition: all 0.25s ease;
+}
+
+.auth-form button:hover {
+    background: #e1b96b;
+}
+
+/* ============================ */
+/* ===== LINKS ================ */
+/* ============================ */
+
+.register,
+.back {
+    font-family: 'NewSans', sans-serif;
+    margin-top: 30px;
+    font-size: 1rem;
+    background-color: #1e1f25;
+}
+
+.register-link {
+    margin-left: 5px;
+    color: #c8a058;
+    font-weight: 500;
+}
+
+.back-link {
+    color: #c8a058;
+    font-weight: 500;
+}
+
+/* ============================ */
+/* ===== ERROR MESSAGE ========= */
+/* ============================ */
+.auth-container p[style] {
+    font-family: 'Metropolis', sans-serif;
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+
+
+
+
+/* ================================= */
+/* ===== REGISTER PAGE CONTAINER === */
+/* ================================= */
+.register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #1a1b21 100%);
+}
+
+.register-card {
+    background-color: #1e1f25;
+    padding: 60px 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    position: relative;
+}
+
+.register-card h2 {
+    font-family: 'Metropolis', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+/* ============================ */
+/* ===== FORM ELEMENTS ======== */
+/* ============================ */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.register-form input,
+select {
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #121317;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: #c8a058;
+    box-shadow: 0 0 6px rgba(200, 160, 88, 0.6);
+    background-color: #1e1f25;
+    color: #e0e0e0;
+}
+
+
+.register-form button {
+    padding: 0 16px 15px;
+    border-radius: 6px;
+    background: #c8a058;
+    border: none;
+    color: #121317;
+    font-weight: 500;
+    font-size: 1.45rem;
+    transition: all 0.25s ease;
+}
+
+.register-form button:hover {
+    background: #e1b96b;
+}
+
+/* ============================ */
+/* ===== LINKS ================ */
+/* ============================ */
+.register-card p {
+    font-family: 'NewSans', sans-serif;
+    background-color: #1e1f25;
+    margin-top: 18px;
+    font-size: 0.95rem;
+}
+
+.register-card p a {
+    color: #c8a058;
+    font-weight: 500;
+    transition: opacity 0.25s ease;
+}
+
+.register-card p a:hover {
+    opacity: 0.7;
+}
+
+
+
+
+
+/* ======================================== */
+/* ===== FORGOT PASSWORD PAGE CONTAINER === */
+/* ======================================== */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #1a1b21 100%);
+}
+
+.auth-container {
+    background-color: #1e1f25;
+    padding: 60px 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    position: relative;
+}
+
+.auth-page h2 {
+    font-family: 'Metropolis', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+/* ============================ */
+/* ===== FORM ELEMENTS ======== */
+/* ============================ */
+.fp-auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.fp-auth-form input {
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #1e1f25;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+.fp-auth-form input::placeholder {
+    color: rgba(224, 224, 224, 0.6);
+}
+
+.fp-auth-form input:focus {
+    outline: none;
+    background-color: #121317;
+    color: #e0e0e0;
+    border-color: #c8a058;
+    box-shadow: 0 0 6px rgba(200, 160, 88, 0.6);
+}
+
+.security-question {
+    font-family: 'Metropolis', sans-serif;
+    font-size: 1.3rem;
+}
+
+/* ============================ */
+/* ===== BUTTONS ============== */
+/* ============================ */
+.fp-auth-form button {
+    border-radius: 6px;
+    background: #c8a058;
+    border: none;
+    color: #121317;
+    font-weight: 500;
+    font-size: 1.45rem;
+    padding: 0 16px 15px;
+    transition: all 0.25s ease;
+}
+
+.fp-auth-form button:hover {
+    background: #e1b96b;
+}
+
+/* ============================ */
+/* ===== MESSAGES ============== */
+/* ============================ */
+.error-message {
+    color: #ff4d4f;
+    font-size: 0.95rem;
+}
+
+.success-message {
+    color: #c8a058;
+    font-size: 0.95rem;
+}
+
+/* ============================ */
+/* ===== LINKS ================ */
+/* ============================ */
+.fp-register {
+    font-family: 'Metropolis', sans-serif;
+    background-color: #1e1f25;
+    margin-top: 30px;
+    font-size: 0.95rem;
+}
+
+.fp-register-link {
+    margin-left: 5px;
+    color: #c8a058;
+    font-weight: 500;
+    transition: opacity 0.25s ease;
+}
+
+.fp-register-link:hover {
+    opacity: 0.7;
+}
+
+/* ============================ */
+/* ===== RESPONSIVE ============ */
+/* ============================ */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 40px 20px;
+    }
+
+    .auth-form input,
+    .auth-form button {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+
+    .forgot-password-link {
+        font-size: 0.85rem;
+    }
+
+    .register,
+    .guest-link {
+        font-size: 0.85rem;
+    }
+
+    .register-card {
+        padding: 40px 20px;
+    }
+
+    .register-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .register-form input,
+    .register-form button {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+
+    .register-card p {
+        font-size: 0.85rem;
+    }
+
+    .auth-container {
+        padding: 40px 20px;
+    }
+
+    .fp-title {
+        font-size: 1.5rem;
+    }
+
+    .fp-auth-form input,
+    .fp-auth-form button {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+
+    .fp-register {
+        font-size: 0.85rem;
+    }
+}
+
+
+
+
+
