@@ -1098,8 +1098,11 @@
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+  transition: filter 0.3s ease;
 }
 
 .portfolio-card {
@@ -1154,26 +1157,23 @@
 }
 
 .card-overlay h3 {
-  font-family: 'UniSans', sans-serif;
+  font-family: 'Metropolis', sans-serif;
   color: #c8a058;
   font-size: 1.6rem;
-  margin-bottom: 6px;
+  margin: 10px 0;
 }
 
 .card-overlay span {
-  font-size: 1.1rem;
+  font-family: 'Metropolis', sans-serif;
+  font-size: .95rem;
   color: #d1d1d1;
   opacity: 0.9;
 }
 
-.card-overlay p {
-  font-size: 1.2rem;
-  color: #d1d1d1;
-  margin: 6px 0 12px 0;
-}
-
 .admin-actions {
+  font-family: 'Metropolis', sans-serif;
   display: flex;
+  width: 300px;
   gap: 12px;
   opacity: 0;
   transition: opacity 0.25s ease;
@@ -1184,9 +1184,10 @@
 }
 
 .admin-actions button {
+  height: 40px;
   flex: 1;
   padding: 9px;
-  font-size: 1.1rem;
+  font-size: .80rem;
   border-radius: 9px;
   border: none;
   cursor: pointer;
@@ -1210,6 +1211,25 @@
 .delete-btn:hover {
   background-color: #e57373;
 }
+
+.featured-btn {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.featured-btn.featured {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.featured-btn:not(.featured) {
+  background-color: #6c757d;
+  color: #fff;
+}
+
 
 .placeholder-card {
   display: flex;
@@ -1261,7 +1281,8 @@
   }
 
   .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+    /* Stack to 1 item per row on small screens */
   }
 }
 

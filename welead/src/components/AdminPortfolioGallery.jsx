@@ -4,7 +4,8 @@ import Navbar from "./Navbar";
 
 function AdminPortfolioGallery({ user, handleLogout }) {
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true); const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [formData, setFormData] = useState({
     id: null,
@@ -36,6 +37,7 @@ function AdminPortfolioGallery({ user, handleLogout }) {
       setProjects(data.portfolio || []);
     } catch (err) {
       console.error("Error fetching portfolio:", err);
+      alert("Failed to load portfolio projects.");
     } finally {
       setLoading(false);
     }
@@ -56,6 +58,7 @@ function AdminPortfolioGallery({ user, handleLogout }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formDataToSend = new FormData();
     formDataToSend.append("category", formData.category);
     formDataToSend.append("title", formData.title);
@@ -71,23 +74,38 @@ function AdminPortfolioGallery({ user, handleLogout }) {
       const res = await fetch(url, { method, body: formDataToSend });
       const data = await res.json();
 
-      if (res.ok) {
-        if (isEditing) {
-          setProjects((prev) =>
-            prev.map((proj) =>
-              proj._id === formData.id ? data.portfolio : proj
-            )
-          );
-        } else {
-          setProjects((prev) => [...prev, data.portfolio]);
-        }
-        setIsEditing(false);
-        setFormData({ id: null, img: "", imgFile: null, category: "", title: "", desc: "" });
-      } else {
-        console.error("Upload error:", data.error);
+      if (!res.ok) {
+        // Show alert if duplicate or backend error
+        alert(data.error || "Failed to add/update project");
+        return; // stop execution
       }
+
+      // Success alert
+      alert(isEditing ? "Project updated successfully!" : "Project added successfully!");
+
+      // Update local state
+      if (isEditing) {
+        setProjects((prev) =>
+          prev.map((proj) => (proj._id === formData.id ? data.portfolio : proj))
+        );
+      } else {
+        setProjects((prev) => [...prev, data.portfolio]);
+      }
+
+      // Reset form
+      setFormData({
+        id: null,
+        img: "",
+        imgFile: null,
+        category: "",
+        title: "",
+        desc: "",
+      });
+      setIsEditing(false);
+
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error(err);
+      alert("An unexpected error occurred");
     }
   };
 
@@ -151,9 +169,9 @@ function AdminPortfolioGallery({ user, handleLogout }) {
                     onChange={handleFileChange}
                     required={!isEditing}
                   />
-                  {formData.imgFile && (
+                  {(formData.imgFile || formData.img) && (
                     <img
-                      src={URL.createObjectURL(formData.imgFile)}
+                      src={formData.imgFile ? URL.createObjectURL(formData.imgFile) : formData.img}
                       alt="Preview"
                       className="image-preview"
                     />
@@ -230,7 +248,7 @@ function AdminPortfolioGallery({ user, handleLogout }) {
                       <div className="card-overlay">
                         <span className="project-category">{project.category}</span>
                         <h3 className="project-title">{project.title}</h3>
-                        {/* <p className="project-description">{project.desc}</p> */}
+
                         <div className="admin-actions">
                           <button
                             className="edit-btn"
@@ -248,16 +266,71 @@ function AdminPortfolioGallery({ user, handleLogout }) {
                           >
                             Edit
                           </button>
+
                           <button
                             className="delete-btn"
                             onClick={() => handleDelete(project._id)}
                           >
                             Delete
                           </button>
+
+                          {/* FEATURED TOGGLE BUTTON */}
+                          <button
+                            className={`featured-btn ${project.featured ? "featured" : ""}`}
+                            onClick={async () => {
+                              const originalFeatured = project.featured;
+                              // Optimistically update UI
+                              setProjects((prev) =>
+                                prev.map((p) =>
+                                  p._id === project._id ? { ...p, featured: !originalFeatured } : p
+                                )
+                              );
+                              try {
+                                const res = await fetch(
+                                  `http://localhost:5000/portfolio/${project._id}/featured`,
+                                  {
+                                    method: "PUT",
+                                    body: new URLSearchParams({
+                                      featured: (!originalFeatured).toString(),
+                                    }),
+                                  }
+                                );
+                                const data = await res.json();
+                                if (!res.ok) {
+                                  // Revert on error
+                                  setProjects((prev) =>
+                                    prev.map((p) =>
+                                      p._id === project._id ? { ...p, featured: originalFeatured } : p
+                                    )
+                                  );
+                                  console.error("Error updating featured:", data.error);
+                                }
+                              } catch (err) {
+                                // Revert on error
+                                setProjects((prev) =>
+                                  prev.map((p) =>
+                                    p._id === project._id ? { ...p, featured: originalFeatured } : p
+                                  )
+                                );
+                                console.error(err);
+                              }
+                            }}
+                          >
+                            {project.featured ? "Remove Featured" : "Add to Featured"}
+                          </button>
                         </div>
                       </div>
                     </div>
                   ))}
+
+                  {/* Placeholder card - only show if no filtered projects */}
+                  {filteredProjects.length === 0 && (
+                    <div className="portfolio-card placeholder-card">
+                      <div className="placeholder-content">
+                        <p>Have some projects you want to showcase? Upload it now, Mr. Architect!</p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Placeholder card */}
                   <div className="portfolio-card placeholder-card">

@@ -73,7 +73,7 @@ const ForgotPassword = () => {
         <h2>Forgot Password</h2>
 
         {step === 1 && (
-          <form onSubmit={handleEmailSubmit} className="fp-auth-form">
+          <form onSubmit={handleEmailSubmit} className="auth-form">
             <input
               type="email"
               placeholder="Enter your email"
@@ -81,14 +81,14 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            {error && <p className="error-message">{error}</p>}
+            {error && <p style={{ color: "red", fontSize: "0.80rem" }}>{error}</p>}
             <button type="submit">Next</button>
           </form>
         )}
 
         {step === 2 && (
-          <form onSubmit={handleAnswerSubmit} className="fp-auth-form">
-            <label className="security-question">{question}</label>
+          <form onSubmit={handleAnswerSubmit} className="auth-form">
+            <label className="security-question">Question: {question}?</label>
             <input
               type="text"
               placeholder="Answer"
@@ -103,14 +103,14 @@ const ForgotPassword = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
-            {error && <p className="error-message">{error}</p>}
+            {error && <p style={{ color: "red", fontSize: "0.80rem" }}>{error}</p>}
             {message && <p className="success-message">{message}</p>}
             <button type="submit">Reset Password</button>
           </form>
         )}
 
-        <p className="fp-register">
-          <Link to="/Login" className="fp-register-link">Back to Login</Link>
+        <p className="register">
+          <Link to="/Login" className="register-link">Back to Login</Link>
         </p>
       </div>
     </div>

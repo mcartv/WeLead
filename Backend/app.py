@@ -227,6 +227,14 @@ def add_portfolio():
         if not file:
             return jsonify({"error": "No image file uploaded"}), 400
 
+        # Case-insensitive duplicate check
+        duplicate = portfolio.find_one({
+            "title": {"$regex": f"^{re.escape(title)}$", "$options": "i"},
+            "desc": {"$regex": f"^{re.escape(desc)}$", "$options": "i"}
+        })
+        if duplicate:
+            return jsonify({"error": "This project is already added to the portfolio"}), 400
+
         img_base64 = base64.b64encode(file.read()).decode("utf-8")
 
         new_item = {
@@ -234,6 +242,7 @@ def add_portfolio():
             "category": category,
             "title": title,
             "desc": desc,
+            "featured": False  # default featured status
         }
 
         result = portfolio.insert_one(new_item)
@@ -245,6 +254,8 @@ def add_portfolio():
     except Exception as e:
         print("❌ ERROR:", e)
         return jsonify({"error": str(e)}), 500
+
+
 
 
 # -------------------------------
@@ -447,16 +458,57 @@ def update_request(id):
 
 
 
-# GET all projects (for Project Tracker)
-@app.route("/projects", methods=["GET"])
-def get_projects():
+# -------------------------------
+# GET all featured portfolio projects
+# -------------------------------
+@app.route("/portfolio/featured", methods=["GET"])
+def get_featured_portfolio():
     try:
-        all_projects = list(projects.find().sort("created_at", -1))
-        for p in all_projects:
+        # Only return projects where featured == True
+        featured_projects = list(portfolio.find({"featured": True}))
+        for p in featured_projects:
             p["_id"] = str(p["_id"])
-        return jsonify(all_projects), 200
+        return jsonify({"portfolio": featured_projects}), 200
+    except Exception as e:
+        print("❌ ERROR fetching featured portfolio:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+# -------------------------------
+# TOGGLE portfolio project FEATURED STATUS
+# -------------------------------
+@app.route("/portfolio/<id>/featured", methods=["PUT"])
+def toggle_portfolio_featured(id):
+    try:
+        featured_value = request.form.get("featured")
+        if featured_value not in ["true", "false"]:
+            return jsonify({"error": "Featured value must be 'true' or 'false'"}), 400
+
+        # Convert string to boolean
+        is_featured = True if featured_value == "true" else False
+
+        # Update the portfolio item
+        result = portfolio.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": {"featured": is_featured}}
+        )
+
+        if result.matched_count == 0:
+            return jsonify({"error": "Portfolio project not found"}), 404
+
+        updated_project = portfolio.find_one({"_id": ObjectId(id)})
+        updated_project["_id"] = str(updated_project["_id"])
+
+        return jsonify({
+            "message": f"Portfolio featured status updated to {is_featured}",
+            "portfolio": updated_project
+        }), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
 
 

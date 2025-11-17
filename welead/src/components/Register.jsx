@@ -35,12 +35,12 @@ function Register() {
   };
 
   return (
-    <div className="register-page">
-      <div className="register-card">
+    <div className="auth-page">
+      <div className="auth-container">
         <h1 id="leads">LEADS</h1>
         <h2>Create your account</h2>
 
-        <form onSubmit={handleSubmit} className="register-form">
+        <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="text"
             placeholder="First Name"
@@ -125,8 +125,8 @@ function Register() {
           <button type="submit">Register</button>
         </form>
 
-        <p>
-          Already have an account? <Link to="/Login">Login</Link>
+        <p className="register">
+          Already have an account? <Link to="/Login" className="register-link">Login</Link>
         </p>
 
         <p className="back">

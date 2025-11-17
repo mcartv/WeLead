@@ -74,7 +74,7 @@ function Login({ setUser }) {
           <button type="submit">Login</button>
         </form>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red", fontSize: "0.80rem" }}>{error}</p>}
 
         <p className="register">
           Don't have an account?
