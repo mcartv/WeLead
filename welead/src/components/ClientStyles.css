@@ -1,8 +1,8 @@
 /* ==================================== */
-/* DARK MODE SERVICE REQUEST FORM STYLE */
+/* DARK MODE CLIENT SERVICE REQUEST FORM STYLE */
 /* ==================================== */
 
-.admin-review-container {
+.client-admin-review-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +15,7 @@
   margin: 20px auto;
 }
 
-.service-form-grid {
+.client-service-form-grid {
   margin-top: 30px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -23,13 +23,13 @@
   width: 800px;
 }
 
-.form-group-dark {
+.client-form-group-dark {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.form-group-dark label {
+.client-form-group-dark label {
   font-size: 0.9rem;
   font-weight: 600;
   color: #c8a058;
@@ -37,9 +37,9 @@
   letter-spacing: 0.4px;
 }
 
-.form-group-dark input,
-.form-group-dark select,
-.form-group-dark textarea {
+.client-form-group-dark input,
+.client-form-group-dark select,
+.client-form-group-dark textarea {
   background: #121317;
   border: 1px solid #2b2c33;
   padding: 12px 14px;
@@ -49,26 +49,26 @@
   transition: 0.25s ease;
 }
 
-.form-group-dark input:focus,
-.form-group-dark select:focus,
-.form-group-dark textarea:focus {
+.client-form-group-dark input:focus,
+.client-form-group-dark select:focus,
+.client-form-group-dark textarea:focus {
   border-color: #c8a058;
   box-shadow: 0 0 0 2px rgba(200, 160, 88, 0.25);
   outline: none;
 }
 
-.form-fullwidth-dark {
+.client-form-fullwidth-dark {
   grid-column: span 2;
 }
 
-.btn-container {
+.client-btn-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
   grid-column: span 2;
 }
 
-.submit-btn-dark {
+.client-submit-btn-dark {
   background: #c8a058;
   color: #121317;
   padding: 14px 20px;
@@ -80,11 +80,11 @@
   width: 100%;
 }
 
-.submit-btn-dark:hover {
+.client-submit-btn-dark:hover {
   background: #e0be6f;
 }
 
-.success-text-dark {
+.client-success-text-dark {
   color: #2ecc71;
   font-size: 0.95rem;
   text-align: center;
@@ -93,24 +93,24 @@
 
 /* Mobile */
 @media screen and (max-width: 768px) {
-  .service-form-grid {
+  .client-service-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-fullwidth-dark {
+  .client-form-fullwidth-dark {
     grid-column: span 1;
   }
 
-  .btn-container {
+  .client-btn-container {
     grid-column: span 1;
   }
 }
 
 /* ============================= */
-/* CONFIRMATION MODAL (DARK THEME) */
+/* CLIENT CONFIRMATION MODAL (DARK THEME) */
 /* ============================= */
 
-.cli-modal-overlay {
+.client-modal-overlay {
   font-family: 'MetroPolis', sans-serif;
   position: fixed;
   inset: 0;
@@ -123,7 +123,7 @@
   backdrop-filter: blur(12px); /* Standard */
 }
 
-.cli-modal-content {
+.client-modal-content {
   background: #1e1f25;
   border-radius: 14px;
   max-width: 520px;
@@ -131,10 +131,10 @@
   padding: 40px;
   border: 1px solid rgba(200, 160, 88, 0.25);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-  animation: modalPop 0.22s ease-out;
+  animation: clientModalPop 0.22s ease-out;
 }
 
-@keyframes modalPop {
+@keyframes clientModalPop {
   from {
     opacity: 0;
     transform: translateY(20px) scale(0.97);
@@ -146,7 +146,7 @@
   }
 }
 
-.cli-modal-title {
+.client-modal-title {
   font-size: 22px;
   font-weight: 700;
   color: #c8a058;
@@ -155,14 +155,14 @@
   letter-spacing: 0.5px;
 }
 
-.confirmation-list {
+.client-confirmation-list {
   display: grid;
   gap: 12px;
   margin-bottom: 26px;
   font-size: 0.95rem;
 }
 
-.confirmation-list p {
+.client-confirmation-list p {
   background: #17181d;
   padding: 12px 16px;
   border-radius: 10px;
@@ -170,18 +170,18 @@
   color: #d6d6d6;
 }
 
-.confirmation-list strong {
+.client-confirmation-list strong {
   color: #c8a058;
 }
 
-.cli-modal-buttons {
+.client-modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.cli-submit-btn {
+.client-submit-btn {
   background: #c8a058;
   color: #121317;
   padding: 12px 22px;
@@ -192,11 +192,11 @@
   transition: 0.25s;
 }
 
-.cli-submit-btn:hover {
+.client-submit-btn:hover {
   background: #e0be6f;
 }
 
-.cli-cancel-btn {
+.client-cancel-btn {
   background: #27282d;
   color: #e0e0e0;
   padding: 12px 22px;
@@ -207,6 +207,6 @@
   transition: 0.25s;
 }
 
-.cli-cancel-btn:hover {
+.client-cancel-btn:hover {
   background: #34353c;
 }
