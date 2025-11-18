@@ -594,7 +594,7 @@
 .client-requests-grid,
 .calendar-view {
   display: grid;
-  width: 100%;
+  width: 97%;
   overflow: auto;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;

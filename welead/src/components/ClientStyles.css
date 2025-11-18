@@ -1,0 +1,211 @@
+/* ==================================== */
+/* DARK MODE CLIENT SERVICE REQUEST FORM STYLE */
+/* ==================================== */
+
+.client-admin-review-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #1e1f25;
+  padding: 28px 32px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  max-width: 960px;
+  margin: 20px auto;
+}
+
+.client-service-form-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 800px;
+}
+
+.client-form-group-dark {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.client-form-group-dark label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c8a058;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.client-form-group-dark input,
+.client-form-group-dark select,
+.client-form-group-dark textarea {
+  background: #121317;
+  border: 1px solid #2b2c33;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  transition: 0.25s ease;
+}
+
+.client-form-group-dark input:focus,
+.client-form-group-dark select:focus,
+.client-form-group-dark textarea:focus {
+  border-color: #c8a058;
+  box-shadow: 0 0 0 2px rgba(200, 160, 88, 0.25);
+  outline: none;
+}
+
+.client-form-fullwidth-dark {
+  grid-column: span 2;
+}
+
+.client-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  grid-column: span 2;
+}
+
+.client-submit-btn-dark {
+  background: #c8a058;
+  color: #121317;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+  width: 100%;
+}
+
+.client-submit-btn-dark:hover {
+  background: #e0be6f;
+}
+
+.client-success-text-dark {
+  color: #2ecc71;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .client-service-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .client-form-fullwidth-dark {
+    grid-column: span 1;
+  }
+
+  .client-btn-container {
+    grid-column: span 1;
+  }
+}
+
+/* ============================= */
+/* CLIENT CONFIRMATION MODAL (DARK THEME) */
+/* ============================= */
+
+.client-modal-overlay {
+  font-family: 'MetroPolis', sans-serif;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  backdrop-filter: blur(4px);
+}
+
+.client-modal-content {
+  background: #1e1f25;
+  border-radius: 14px;
+  max-width: 520px;
+  width: 90%;
+  padding: 40px;
+  border: 1px solid rgba(200, 160, 88, 0.25);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+  animation: clientModalPop 0.22s ease-out;
+}
+
+@keyframes clientModalPop {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.client-modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #c8a058;
+  margin-bottom: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.client-confirmation-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 26px;
+  font-size: 0.95rem;
+}
+
+.client-confirmation-list p {
+  background: #17181d;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #d6d6d6;
+}
+
+.client-confirmation-list strong {
+  color: #c8a058;
+}
+
+.client-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.client-submit-btn {
+  background: #c8a058;
+  color: #121317;
+  padding: 12px 22px;
+  border: none;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.client-submit-btn:hover {
+  background: #e0be6f;
+}
+
+.client-cancel-btn {
+  background: #27282d;
+  color: #e0e0e0;
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: 1px solid #2d2e34;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.client-cancel-btn:hover {
+  background: #34353c;
+}
