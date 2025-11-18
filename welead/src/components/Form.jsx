@@ -89,14 +89,17 @@ export default function ServiceRequest({ user, handleLogout }) {
     <>
       <Navbar user={user} handleLogout={handleLogout} />
 
-      <div className="admin-review-container">
+      {/* CHANGED: admin-review-container to client-admin-review-container */}
+      <div className="client-admin-review-container">
         <h1>Service Request Form</h1>
         <p>Tell us about your project. Your account details will be used automatically.</p>
 
         <section className="form-section">
-          <form className="service-form-grid" onSubmit={handleOpenModal}>
+          {/* CHANGED: service-form-grid to client-service-form-grid */}
+          <form className="client-service-form-grid" onSubmit={handleOpenModal}>
             {/* SERVICE TYPE */}
-            <div className="form-group-dark">
+            {/* CHANGED: form-group-dark to client-form-group-dark */}
+            <div className="client-form-group-dark">
               <label>Service Type</label>
               <select name="serviceType" value={formData.serviceType} onChange={handleChange}>
                 <option>Consultation</option>
@@ -109,7 +112,7 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* LOCATION */}
-            <div className="form-group-dark">
+            <div className="client-form-group-dark">
               <label>Project Location</label>
               <input
                 type="text"
@@ -122,7 +125,7 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* CONTACT NUMBER */}
-            <div className="form-group-dark">
+            <div className="client-form-group-dark">
               <label>Contact Number</label>
               <input
                 type="tel"
@@ -138,7 +141,7 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* BUDGET */}
-            <div className="form-group-dark">
+            <div className="client-form-group-dark">
               <label>Estimated Budget</label>
               <select name="budgetRange" value={formData.budgetRange} onChange={handleChange} required>
                 <option value="">Select a range</option>
@@ -151,7 +154,7 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* TIMELINE */}
-            <div className="form-group-dark">
+            <div className="client-form-group-dark">
               <label>Project Timeline / Priority</label>
               <select name="timelinePriority" value={formData.timelinePriority} onChange={handleChange} required>
                 <option value="">Select timeline</option>
@@ -163,7 +166,7 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* REFERRAL SOURCE */}
-            <div className="form-group-dark">
+            <div className="client-form-group-dark">
               <label>How did you hear about us?</label>
               <select
                 name="referralSource"
@@ -182,7 +185,8 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* DESCRIPTION */}
-            <div className="form-group-dark form-fullwidth-dark">
+            {/* CHANGED: form-group-dark form-fullwidth-dark to client-form-group-dark client-form-fullwidth-dark */}
+            <div className="client-form-group-dark client-form-fullwidth-dark">
               <label>Project Description</label>
               <textarea
                 name="description"
@@ -194,11 +198,14 @@ export default function ServiceRequest({ user, handleLogout }) {
             </div>
 
             {/* SUBMIT */}
-            <div className="form-group-dark form-fullwidth-dark btn-container">
-              <button className="submit-btn-dark" onClick={handleOpenModal}>
+            {/* CHANGED: form-group-dark form-fullwidth-dark btn-container to client-form-group-dark client-form-fullwidth-dark client-btn-container */}
+            <div className="client-form-group-dark client-form-fullwidth-dark client-btn-container">
+              {/* CHANGED: submit-btn-dark to client-submit-btn-dark */}
+              <button className="client-submit-btn-dark" onClick={handleOpenModal}>
                 Submit Request
               </button>
-              {success && <p className="success-text-dark">✔ Request submitted successfully!</p>}
+              {/* CHANGED: success-text-dark to client-success-text-dark */}
+              {success && <p className="client-success-text-dark">✔ Request submitted successfully!</p>}
             </div>
           </form>
         </section>
@@ -206,10 +213,14 @@ export default function ServiceRequest({ user, handleLogout }) {
 
       {/* CONFIRMATION MODAL */}
       {showModal && (
-        <div className="-cli-modal-overlay">
-          <div className="cli-modal-content">
-            <h2 className="cli-modal-title">Confirm Your Request</h2>
-            <div className="confirmation-list">
+        /* CHANGED: -cli-modal-overlay to client-modal-overlay */
+        <div className="client-modal-overlay">
+          {/* CHANGED: cli-modal-content to client-modal-content */}
+          <div className="client-modal-content">
+            {/* CHANGED: cli-modal-title to client-modal-title */}
+            <h2 className="client-modal-title">Confirm Your Request</h2>
+            {/* CHANGED: confirmation-list to client-confirmation-list */}
+            <div className="client-confirmation-list">
               <p><strong>Service Type:</strong> {formData.serviceType}</p>
               <p><strong>Project Location:</strong> {formData.projectLocation}</p>
               <p><strong>Contact Number:</strong> {formData.contactNumber}</p>
@@ -220,9 +231,12 @@ export default function ServiceRequest({ user, handleLogout }) {
               )}
               <p><strong>Description:</strong> {formData.description || "No description added"}</p>
             </div>
-            <div className="cli-modal-buttons">
-              <button className="cli-cancel-btn" onClick={() => setShowModal(false)}>Review Again</button>
-              <button className="cli-submit-btn" onClick={handleSubmit}>Submit Request</button>
+            {/* CHANGED: cli-modal-buttons to client-modal-buttons */}
+            <div className="client-modal-buttons">
+              {/* CHANGED: cli-cancel-btn to client-cancel-btn */}
+              <button className="client-cancel-btn" onClick={() => setShowModal(false)}>Review Again</button>
+              {/* CHANGED: cli-submit-btn to client-submit-btn */}
+              <button className="client-submit-btn" onClick={handleSubmit}>Submit Request</button>
             </div>
           </div>
         </div>

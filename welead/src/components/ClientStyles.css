@@ -13,6 +13,22 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   max-width: 960px;
   margin: 20px auto;
+  color: #ffffff !important; /* ADDED: Main text color */
+}
+
+/* ADDED: Header text styles */
+.client-admin-review-container h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #c8a058 !important;
+}
+
+.client-admin-review-container > p {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #e0e0e0 !important;
+  opacity: 0.9;
 }
 
 .client-service-form-grid {
@@ -27,6 +43,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  color: #ffffff !important; /* ADDED: Form group text color */
 }
 
 .client-form-group-dark label {
@@ -47,6 +64,13 @@
   font-size: 0.95rem;
   color: #e0e0e0;
   transition: 0.25s ease;
+}
+
+/* ADDED: Placeholder text color */
+.client-form-group-dark input::placeholder,
+.client-form-group-dark textarea::placeholder {
+  color: #888 !important;
+  opacity: 0.7;
 }
 
 .client-form-group-dark input:focus,
@@ -132,6 +156,7 @@
   border: 1px solid rgba(200, 160, 88, 0.25);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
   animation: clientModalPop 0.22s ease-out;
+  color: #ffffff !important; /* ADDED: Modal text color */
 }
 
 @keyframes clientModalPop {
@@ -209,4 +234,15 @@
 
 .client-cancel-btn:hover {
   background: #34353c;
+}
+
+/* ADDED: Ensure all text elements are visible */
+.form-section {
+  color: #ffffff !important;
+  width: 100%;
+}
+
+/* ADDED: Global text visibility for any child elements */
+.client-admin-review-container * {
+  color: inherit;
 }
