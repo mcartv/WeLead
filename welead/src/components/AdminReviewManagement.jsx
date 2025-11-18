@@ -1,53 +1,73 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import "./AdminStyles.css";
 import Navbar from "./Navbar";
 
 const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
-  const [tasks, setTasks] = useState([]); // Projects from DB
-  const [requests, setRequests] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [newNotification, setNewNotification] = useState({ message: "" });
-  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      name: "Urban Residence Tower",
+      client: "ACME Corp.",
+      status: "active",
+      timeline: "2025-12-31",
+      phases: [
+        { name: "Design", completed: true, notes: "Initial sketches done", documents: ["design.pdf"], images: ["design.png"] },
+        { name: "Approval", completed: false, notes: "", documents: [], images: [] },
+        { name: "Construction", completed: false, notes: "", documents: [], images: [] },
+      ],
+    },
+    {
+      id: 2,
+      name: "City Mall Renovation",
+      client: "MegaMall Inc.",
+      status: "active",
+      timeline: "2026-03-15",
+      phases: [
+        { name: "Design", completed: true, notes: "Layouts approved", documents: ["layouts.pdf"], images: [] },
+        { name: "Approval", completed: false, notes: "", documents: [], images: [] },
+        { name: "Construction", completed: false, notes: "", documents: [], images: [] },
+      ],
+    },
+  ]);
 
-  // Memoized phases
+  const [requests, setRequests] = useState([
+    { id: 101, taskId: 1, request: "Change facade color", requestedBy: "John Doe", status: "Pending", comments: "" },
+    { id: 102, taskId: 2, request: "Add more elevators", requestedBy: "Jane Smith", status: "Pending", comments: "" },
+  ]);
+
+  const [notifications, setNotifications] = useState([
+    { id: 1, message: "Project approvals due this week", date: "2025-11-18" },
+    { id: 2, message: "New client request submitted", date: "2025-11-17" },
+  ]);
+
+  const [newNotification, setNewNotification] = useState({ message: "" });
+
   const phases = useMemo(() => ["Design", "Approval", "Construction"], []);
 
-  // Fetch projects, requests, notifications
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/projects");
-        const data = await res.json();
-        // Only active projects
-        const activeProjects = (data || []).filter((p) => p.status === "active");
-        setTasks(activeProjects);
-      } catch (err) {
-        console.error("Failed to fetch projects:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-
-  // Memoize tasks by phase dynamically from project phases
   const tasksByPhase = useMemo(() => {
     const acc = {};
     tasks.forEach((project) => {
       project.phases.forEach((phase) => {
         if (!acc[phase.name]) acc[phase.name] = [];
-        acc[phase.name].push({ ...phase, projectName: project.name, client: project.client, dueDate: project.timeline });
+        acc[phase.name].push({
+          ...phase,
+          projectName: project.name,
+          client: project.client,
+          dueDate: project.timeline,
+        });
       });
     });
     return acc;
   }, [tasks]);
 
-  // Request handlers
-  const approveRequest = (id) => setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Approved" } : r)));
-  const denyRequest = (id) => setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Rejected" } : r)));
-  const rescheduleRequest = (id) => setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Rescheduled" } : r)));
-  const addComment = (id, comment) => setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, comments: comment } : r)));
+  const approveRequest = (id) =>
+    setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Approved" } : r)));
+  const denyRequest = (id) =>
+    setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Rejected" } : r)));
+  const rescheduleRequest = (id) =>
+    setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: "Rescheduled" } : r)));
+  const addComment = (id, comment) =>
+    setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, comments: comment } : r)));
 
   const addNotification = (e) => {
     e.preventDefault();
@@ -64,68 +84,72 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
       <Navbar user={user} handleLogout={handleLogout} />
 
       <div className="admin-review-container">
-        {loading ? (
-          <p>Loading projects...</p>
-        ) : (
-          <div className="dashboard-grid">
-            {/* Left Column: Project Overview */}
-            <div className="left-column">
-              <div className="section project-overview">
-                <h2>Project Overview</h2>
-                <p>All active projects with phase tracking.</p>
-                {phases.map((phase) => (
-                  <div key={phase} className="phase-section">
-                    <h3>{phase} Phase</h3>
-                    {Object.keys(tasksByPhase).length === 0 ? (
-                      <p>No active projects.</p>
-                    ) : (
-                      Object.entries(tasksByPhase).map(([phaseName, phaseTasks]) => (
-                        <div key={phaseName} className="phase-section">
-                          <h3>{phaseName} Phase</h3>
-                          {phaseTasks.length === 0 ? (
-                            <p>No tasks in this phase.</p>
-                          ) : (
-                            phaseTasks.map((t, idx) => (
-                              <div key={idx} className="task-item">
-                                <div className="task-info">
-                                  <h4>{t.projectName}</h4>
-                                  <p>Client: {t.client || "N/A"}</p>
-                                  <p>Due: {t.dueDate || "No due date"}</p>
-                                  <p>Completed: {t.completed ? "Yes" : "No"}</p>
-                                  <p>Notes: {t.notes || "None"}</p>
-                                  {t.documents?.length > 0 && (
-                                    <div>
-                                      <h5>Documents:</h5>
-                                      {t.documents.map((doc, i) => <a key={i} href={`#${doc}`} target="_blank">{doc}</a>)}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                ))}
-              </div>
+        <div className="dashboard-grid">
+          {/* ---------------- Left Column: Project Overview ---------------- */}
+          <div className="left-column">
+            <div className="section project-overview">
+              <h2>Project Overview</h2>
+              {phases.map((phase) => (
+                <div key={phase} className="phase-section">
+                  <h3>{phase} Phase</h3>
+                  {tasksByPhase[phase]?.length > 0 ? (
+                    tasksByPhase[phase].map((task, idx) => (
+                      <div key={idx} className="task-card">
+                        <h4>{task.projectName}</h4>
+                        <p>
+                          <strong>Client:</strong> {task.client || "N/A"}
+                        </p>
+                        <p>
+                          <strong>Due:</strong> {task.dueDate || "No due date"}
+                        </p>
+                        <p>
+                          <strong>Completed:</strong> {task.completed ? "Yes" : "No"}
+                        </p>
+                        {task.notes && (
+                          <p>
+                            <strong>Notes:</strong> {task.notes}
+                          </p>
+                        )}
+                        {task.documents?.length > 0 && (
+                          <div>
+                            <strong>Documents:</strong>
+                            <ul>
+                              {task.documents.map((doc, i) => (
+                                <li key={i}>
+                                  <a href={`#${doc}`} target="_blank" rel="noreferrer">
+                                    {doc}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>No tasks in this phase.</p>
+                  )}
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Right Column: Notifications & Requests */}
-            <div className="right-column">
-              {/* Notifications */}
-              <div className="section notifications-comments">
-                <h2>Notifications & Comments</h2>
-                <form onSubmit={addNotification} className="add-notification-form">
-                  <input
-                    type="text"
-                    placeholder="New notification message..."
-                    value={newNotification.message}
-                    onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
-                    required
-                  />
-                  <button type="submit">Add Notification</button>
-                </form>
+          {/* ---------------- Right Column: Notifications & Requests ---------------- */}
+          <div className="right-column">
+            {/* Notifications */}
+            <div className="section notifications-comments">
+              <h2>Notifications</h2>
+              <form onSubmit={addNotification} className="add-notification-form">
+                <input
+                  type="text"
+                  placeholder="New notification message..."
+                  value={newNotification.message}
+                  onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
+                  required
+                />
+                <button type="submit">Add</button>
+              </form>
+              <div className="notification-list">
                 {notifications.map((n) => (
                   <div key={n.id} className="notification-item">
                     <p>{n.message}</p>
@@ -133,49 +157,56 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
                   </div>
                 ))}
               </div>
+            </div>
 
-              {/* Client Requests */}
-              <div className="section client-requests">
-                <h2>Client Requests</h2>
-                {requests.length === 0 ? (
-                  <p>No requests.</p>
-                ) : (
-                  requests.map((r) => (
-                    <div key={r.id} className="request-item">
-                      <p><strong>Milestone:</strong> {tasks.find((t) => t.id === r.taskId)?.name || "Unknown"}</p>
-                      <p><strong>Request Details:</strong> {r.request}</p>
-                      <p><strong>Requested By:</strong> {r.requestedBy}</p>
-                      <p><strong>Status:</strong> {r.status}</p>
-                      {r.status === "Pending" && (
-                        <div className="request-actions">
-                          <button onClick={() => approveRequest(r.id)}>✅ Approve</button>
-                          <button onClick={() => denyRequest(r.id)}>❌ Reject</button>
-                          <button onClick={() => rescheduleRequest(r.id)}>🕓 Reschedule</button>
-                        </div>
-                      )}
-                      <div>
-                        <h5>Comments:</h5>
-                        <textarea
-                          value={r.comments}
-                          onChange={(e) => addComment(r.id, e.target.value)}
-                          placeholder="Leave feedback or comments..."
-                        />
+            {/* Client Requests */}
+            <div className="section client-requests">
+              <h2>Client Requests</h2>
+              {requests.length === 0 ? (
+                <p>No requests.</p>
+              ) : (
+                requests.map((r) => (
+                  <div key={r.id} className="request-card">
+                    <p>
+                      <strong>Project:</strong> {tasks.find((t) => t.id === r.taskId)?.name || "Unknown"}
+                    </p>
+                    <p>
+                      <strong>Request:</strong> {r.request}
+                    </p>
+                    <p>
+                      <strong>Requested By:</strong> {r.requestedBy}
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {r.status}
+                    </p>
+                    {r.status === "Pending" && (
+                      <div className="request-actions">
+                        <button onClick={() => approveRequest(r.id)}>✅ Approve</button>
+                        <button onClick={() => denyRequest(r.id)}>❌ Reject</button>
+                        <button onClick={() => rescheduleRequest(r.id)}>🕓 Reschedule</button>
                       </div>
-                    </div>
-                  ))
-                )}
-              </div>
+                    )}
+                    <textarea
+                      value={r.comments}
+                      onChange={(e) => addComment(r.id, e.target.value)}
+                      placeholder="Leave a comment..."
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Planner Overview */}
+        {/* ---------------- Planner Overview ---------------- */}
         <div className="section planner-overview">
           <h2>Planner Overview</h2>
           <div className="calendar-view">
             {tasks.map((t) => (
               <div key={t.id} className="calendar-item">
-                <p><strong>{t.name}</strong> - Due: {t.dueDate} - Status: {t.status}</p>
+                <p>
+                  <strong>{t.name}</strong> - Due: {t.timeline} - Status: {t.status}
+                </p>
               </div>
             ))}
           </div>

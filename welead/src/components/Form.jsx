@@ -206,9 +206,9 @@ export default function ServiceRequest({ user, handleLogout }) {
 
       {/* CONFIRMATION MODAL */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2 className="modal-title">Confirm Your Request</h2>
+        <div className="-cli-modal-overlay">
+          <div className="cli-modal-content">
+            <h2 className="cli-modal-title">Confirm Your Request</h2>
             <div className="confirmation-list">
               <p><strong>Service Type:</strong> {formData.serviceType}</p>
               <p><strong>Project Location:</strong> {formData.projectLocation}</p>
@@ -220,9 +220,9 @@ export default function ServiceRequest({ user, handleLogout }) {
               )}
               <p><strong>Description:</strong> {formData.description || "No description added"}</p>
             </div>
-            <div className="modal-buttons">
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>Review Again</button>
-              <button className="submit-btn" onClick={handleSubmit}>Submit Request</button>
+            <div className="cli-modal-buttons">
+              <button className="cli-cancel-btn" onClick={() => setShowModal(false)}>Review Again</button>
+              <button className="cli-submit-btn" onClick={handleSubmit}>Submit Request</button>
             </div>
           </div>
         </div>

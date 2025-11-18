@@ -646,6 +646,70 @@ def get_tasks_overview():
 
 
 
+# -------------------------------
+# GET all projects (for Project Tracker)
+# -------------------------------
+@app.route("/projects", methods=["GET"])
+def get_projects():
+    try:
+        # TODO: You could filter by email for client view later
+        all_projects = list(projects.find())
+        for p in all_projects:
+            p["_id"] = str(p["_id"])
+            if "phases" not in p or not p["phases"]:
+                p["phases"] = [
+                    {"name": "Concept Design", "completed": False, "notes": "", "documents": [], "images": []},
+                    {"name": "Design Development", "completed": False, "notes": "", "documents": [], "images": []},
+                    {"name": "Construction Documents", "completed": False, "notes": "", "documents": [], "images": []},
+                    {"name": "Permits", "completed": False, "notes": "", "documents": [], "images": []},
+                    {"name": "Construction", "completed": False, "notes": "", "documents": [], "images": []},
+                    {"name": "Turnover", "completed": False, "notes": "", "documents": [], "images": []}
+                ]
+            if "approved" not in p:
+                p["approved"] = False
+        return jsonify(all_projects), 200
+    except Exception as e:
+        print("❌ ERROR fetching projects:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+# -------------------------------
+# UPDATE SINGLE PROJECT PHASE
+# -------------------------------
+@app.route("/projects/<id>/phases/<int:phase_index>", methods=["PUT"])
+def update_project_phase(id, phase_index):
+    try:
+        data = request.get_json()
+        completed = data.get("completed", False)
+        notes = data.get("notes", "")
+        documents = data.get("documents", [])
+        images = data.get("images", [])
+
+        project = projects.find_one({"_id": ObjectId(id)})
+        if not project:
+            return jsonify({"error": "Project not found"}), 404
+
+        # Update only the specified phase
+        if "phases" not in project or len(project["phases"]) <= phase_index:
+            return jsonify({"error": "Invalid phase index"}), 400
+
+        project["phases"][phase_index]["completed"] = completed
+        project["phases"][phase_index]["notes"] = notes
+        project["phases"][phase_index]["documents"] = documents
+        project["phases"][phase_index]["images"] = images
+
+        projects.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": {"phases": project["phases"]}}
+        )
+
+        project["_id"] = str(project["_id"])
+        return jsonify(project), 200
+
+    except Exception as e:
+        print("❌ ERROR updating project phase:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 

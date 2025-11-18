@@ -110,7 +110,7 @@
 /* CONFIRMATION MODAL (DARK THEME) */
 /* ============================= */
 
-.modal-overlay {
+.cli-modal-overlay {
   font-family: 'MetroPolis', sans-serif;
   position: fixed;
   inset: 0;
@@ -122,7 +122,7 @@
   backdrop-filter: blur(4px);
 }
 
-.modal-content {
+.cli-modal-content {
   background: #1e1f25;
   border-radius: 14px;
   max-width: 520px;
@@ -145,7 +145,7 @@
   }
 }
 
-.modal-title {
+.cli-modal-title {
   font-size: 22px;
   font-weight: 700;
   color: #c8a058;
@@ -173,14 +173,14 @@
   color: #c8a058;
 }
 
-.modal-buttons {
+.cli-modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.submit-btn {
+.cli-submit-btn {
   background: #c8a058;
   color: #121317;
   padding: 12px 22px;
@@ -191,11 +191,11 @@
   transition: 0.25s;
 }
 
-.submit-btn:hover {
+.cli-submit-btn:hover {
   background: #e0be6f;
 }
 
-.cancel-btn {
+.cli-cancel-btn {
   background: #27282d;
   color: #e0e0e0;
   padding: 12px 22px;
@@ -206,6 +206,6 @@
   transition: 0.25s;
 }
 
-.cancel-btn:hover {
+.cli-cancel-btn:hover {
   background: #34353c;
 }

@@ -4,6 +4,8 @@ import "../App.css";
 function PortfolioCards({ showBackToLogin }) {
   const [openCard, setOpenCard] = useState(null);
   const [cards, setCards] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
   // Fetch portfolio items from backend
@@ -11,8 +13,8 @@ function PortfolioCards({ showBackToLogin }) {
     try {
       const res = await fetch("http://localhost:5000/portfolio");
       const data = await res.json();
-      console.log("Fetched portfolio:", data);
       setCards(data.portfolio || []);
+      setFiltered(data.portfolio || []);
     } catch (err) {
       console.error("Error fetching portfolio:", err);
     } finally {
@@ -20,14 +22,35 @@ function PortfolioCards({ showBackToLogin }) {
     }
   };
 
-  // Call fetchProjects on component mount
   useEffect(() => {
     fetchProjects();
   }, []);
 
+  const handleFilter = (category) => {
+    setActiveCategory(category);
+    if (category === "All") {
+      setFiltered(cards);
+    } else {
+      setFiltered(cards.filter((c) => c.category === category));
+    }
+  };
+
   return (
     <div className="portfolio-container">
-      {/* Loading Spinner */}
+      {/* Category Filter */}
+      <div className="portfolio-filter">
+        {["All", "Commercial", "Residential", "Subdivision", "Renovation"].map((cat) => (
+          <button
+            key={cat}
+            className={activeCategory === cat ? "active" : ""}
+            onClick={() => handleFilter(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Loading */}
       {loading && (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -35,15 +58,14 @@ function PortfolioCards({ showBackToLogin }) {
         </div>
       )}
 
-      {/* Portfolio Grid */}
-      {!loading && cards.length === 0 && (
-        <div className="empty-state">
-          There's no portfolio uploaded yet.
-        </div>
+      {/* Empty */}
+      {!loading && filtered.length === 0 && (
+        <div className="empty-state">There's no portfolio uploaded yet.</div>
       )}
 
+      {/* Portfolio Grid */}
       <div className={`portfolio-grid ${openCard ? "blurred" : ""}`}>
-        {cards.map((card) => (
+        {filtered.map((card) => (
           <div
             className="portfolio-card"
             key={card._id}
@@ -58,30 +80,24 @@ function PortfolioCards({ showBackToLogin }) {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Modal: image left, details right */}
       {openCard && (
         <div className="modal-overlay" onClick={() => setOpenCard(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-image">
+          <div className="modal-content modal-flex" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-left">
               <img src={openCard.img} alt={openCard.title} />
             </div>
-            <div className="modal-text">
+            <div className="modal-right">
               <h2>{openCard.title}</h2>
-              <h4>{openCard.category}</h4>
-              <p>{openCard.desc}</p>
+              <p><strong>Category:</strong> {openCard.category}</p>
+              <p><strong>Description:</strong></p>
+              <p  className="modal-desc">{openCard.desc}</p>
             </div>
+            <button className="modal-close" onClick={() => setOpenCard(null)}>
+              X
+            </button>
           </div>
         </div>
-      )}
-
-      {/* Back to Login */}
-      {showBackToLogin && (
-        <button
-          className="back-login-btn"
-          onClick={() => (window.location.href = "/")}
-        >
-          Back to Login
-        </button>
       )}
     </div>
   );

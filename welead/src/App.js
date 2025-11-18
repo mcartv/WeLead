@@ -92,13 +92,22 @@ function App() {
             path="/settings"
             element={<Settings user={user} handleLogout={handleLogout} />}
           />
-          
           <Route
             path="/controlpanel"
             element={
               user?.role === "admin"
                 ? <ControlPanel user={user} handleLogout={handleLogout} />
                 : <Navigate to="/home" />
+            }
+          />
+          <Route
+            path="/ProjectTracker"
+            element={
+              user?.role === "admin" ? (
+                <ProjectTracker user={user} handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/home" />
+              )
             }
           />
 

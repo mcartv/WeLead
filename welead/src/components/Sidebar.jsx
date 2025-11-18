@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 
 export default function Sidebar({ user, handleLogout }) {
+  
   return (
     <div className="sidebar-container">
       <div className="sidebar">
@@ -90,7 +91,7 @@ export default function Sidebar({ user, handleLogout }) {
           <button
             className="sidebar-item logout-btn"
             onClick={handleLogout}
-            style={{ marginTop: "auto", display: "flex", alignItems: "center" }}
+            style={{ marginTop: "90px", display: "flex", alignItems: "center" }}
           >
             <FaSignOutAlt className="icon" />
             <span className="label">Logout</span>

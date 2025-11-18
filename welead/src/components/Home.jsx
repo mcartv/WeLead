@@ -93,7 +93,7 @@ function Home({ sectionRefs, introRef, user }) {
               <div className="featured-card" key={project._id}>
                 <img src={project.img} alt={project.title} />
                 <h3>{project.title}</h3>
-                <p>{project.desc}</p>
+                <p>{project.category}</p>
               </div>
             ))
           )}
@@ -136,7 +136,7 @@ function Home({ sectionRefs, introRef, user }) {
           </div>
 
           <div className="team-card">
-            <img src="/images/archimedes.jpg" alt="Designer" />
+            <img src="/images/Agapito.jpg" alt="Designer" />
             <h3>Vince Ashlee Agapito</h3>
             <p>Architectural Designer</p>
           </div>
@@ -148,7 +148,7 @@ function Home({ sectionRefs, introRef, user }) {
           </div>
 
           <div className="team-card">
-            <img src="/images/archimedes.jpg" alt="Quality Control" />
+            <img src="/images/Bho.jfif" alt="Quality Control" />
             <h3>Jerry Geoff Bho</h3>
             <p>Quality Control Specialist</p>
           </div>
@@ -209,13 +209,13 @@ function Home({ sectionRefs, introRef, user }) {
           </div>
 
           <div className="review-card">
-            <img src="/images/Santiago.png" alt="Miguel Santiago" className="review-avatar" />
+            <img src="/images/Galve.jpg" alt="Leo Lawrence Galve" className="review-avatar" />
             <div className="review-content">
               <p>
                 "Working with LEADS was an incredible experience. They listened to our vision
                 and turned it into a functional, stunning reality."
               </p>
-              <h4>— Dominic Miguel Santiago, Interior Designer</h4>
+              <h4>— Leo Lawrence Galve, Interior Designer</h4>
             </div>
           </div>
         </div>
