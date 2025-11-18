@@ -84,50 +84,44 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
       <Navbar user={user} handleLogout={handleLogout} />
 
       <div className="admin-review-container">
-        <div className="dashboard-grid">
-          {/* ---------------- Left Column: Project Overview ---------------- */}
+        <div className="admin-review-grid">
+          {/* ---------------- Left Column: Project Phases ---------------- */}
           <div className="left-column">
-            <div className="section project-overview">
-              <h2>Project Overview</h2>
+            <div className="section">
+              <h2>Project Phases</h2>
               {phases.map((phase) => (
                 <div key={phase} className="phase-section">
                   <h3>{phase} Phase</h3>
                   {tasksByPhase[phase]?.length > 0 ? (
                     tasksByPhase[phase].map((task, idx) => (
                       <div key={idx} className="task-card">
-                        <h4>{task.projectName}</h4>
-                        <p>
-                          <strong>Client:</strong> {task.client || "N/A"}
-                        </p>
-                        <p>
-                          <strong>Due:</strong> {task.dueDate || "No due date"}
-                        </p>
-                        <p>
-                          <strong>Completed:</strong> {task.completed ? "Yes" : "No"}
-                        </p>
-                        {task.notes && (
-                          <p>
-                            <strong>Notes:</strong> {task.notes}
-                          </p>
-                        )}
-                        {task.documents?.length > 0 && (
-                          <div>
-                            <strong>Documents:</strong>
-                            <ul>
+                        <div>
+                          <h4>{task.projectName}</h4>
+                          <p><strong>Client:</strong> {task.client || "N/A"}</p>
+                          <p><strong>Due:</strong> {task.dueDate || "No due date"}</p>
+                          <p><strong>Completed:</strong> {task.completed ? "✅ Yes" : "❌ No"}</p>
+                          {task.notes && (
+                            <p><strong>Notes:</strong> {task.notes}</p>
+                          )}
+                          {task.documents?.length > 0 && (
+                            <div>
+                              <strong>Documents:</strong>
                               {task.documents.map((doc, i) => (
-                                <li key={i}>
+                                <div key={i}>
                                   <a href={`#${doc}`} target="_blank" rel="noreferrer">
-                                    {doc}
+                                    📄 {doc}
                                   </a>
-                                </li>
+                                </div>
                               ))}
-                            </ul>
-                          </div>
-                        )}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))
                   ) : (
-                    <p>No tasks in this phase.</p>
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <p>No tasks in this phase.</p>
+                    </div>
                   )}
                 </div>
               ))}
@@ -136,10 +130,10 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
 
           {/* ---------------- Right Column: Notifications & Requests ---------------- */}
           <div className="right-column">
-            {/* Notifications */}
+            {/* Notifications Section */}
             <div className="section notifications-comments">
               <h2>Notifications</h2>
-              <form onSubmit={addNotification} className="add-notification-form">
+              <form onSubmit={addNotification}>
                 <input
                   type="text"
                   placeholder="New notification message..."
@@ -147,7 +141,7 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
                   onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
                   required
                 />
-                <button type="submit">Add</button>
+                <button type="submit">Add Notification</button>
               </form>
               <div className="notification-list">
                 {notifications.map((n) => (
@@ -159,40 +153,49 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
               </div>
             </div>
 
-            {/* Client Requests */}
+            {/* Client Requests Section */}
             <div className="section client-requests">
               <h2>Client Requests</h2>
               {requests.length === 0 ? (
-                <p>No requests.</p>
+                <p>No pending requests.</p>
               ) : (
-                requests.map((r) => (
-                  <div key={r.id} className="request-card">
-                    <p>
-                      <strong>Project:</strong> {tasks.find((t) => t.id === r.taskId)?.name || "Unknown"}
-                    </p>
-                    <p>
-                      <strong>Request:</strong> {r.request}
-                    </p>
-                    <p>
-                      <strong>Requested By:</strong> {r.requestedBy}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {r.status}
-                    </p>
-                    {r.status === "Pending" && (
-                      <div className="request-actions">
-                        <button onClick={() => approveRequest(r.id)}>✅ Approve</button>
-                        <button onClick={() => denyRequest(r.id)}>❌ Reject</button>
-                        <button onClick={() => rescheduleRequest(r.id)}>🕓 Reschedule</button>
+                <div className="client-requests-grid">
+                  {requests.map((r) => (
+                    <div key={r.id} className="request-card">
+                      <div>
+                        <h4>{tasks.find((t) => t.id === r.taskId)?.name || "Unknown Project"}</h4>
+                        <p><strong>Request:</strong> {r.request}</p>
+                        <p><strong>Requested By:</strong> {r.requestedBy}</p>
+                        <p><strong>Status:</strong>
+                          <span style={{
+                            color: r.status === "Approved" ? "green" :
+                              r.status === "Rejected" ? "red" :
+                                r.status === "Rescheduled" ? "orange" : "blue",
+                            fontWeight: "600",
+                            marginLeft: "8px"
+                          }}>
+                            {r.status}
+                          </span>
+                        </p>
+
+                        {r.status === "Pending" && (
+                          <div className="request-actions">
+                            <button onClick={() => approveRequest(r.id)}>Approve</button>
+                            <button onClick={() => denyRequest(r.id)}>Reject</button>
+                            <button onClick={() => rescheduleRequest(r.id)}>Reschedule</button>
+                          </div>
+                        )}
+
+                        <textarea
+                          value={r.comments}
+                          onChange={(e) => addComment(r.id, e.target.value)}
+                          placeholder="Add comments..."
+                          rows="3"
+                        />
                       </div>
-                    )}
-                    <textarea
-                      value={r.comments}
-                      onChange={(e) => addComment(r.id, e.target.value)}
-                      placeholder="Leave a comment..."
-                    />
-                  </div>
-                ))
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -204,8 +207,22 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
           <div className="calendar-view">
             {tasks.map((t) => (
               <div key={t.id} className="calendar-item">
+                <h4>{t.name}</h4>
+                <p><strong>Client:</strong> {t.client}</p>
+                <p><strong>Due:</strong> {t.timeline}</p>
                 <p>
-                  <strong>{t.name}</strong> - Due: {t.timeline} - Status: {t.status}
+                  <strong>Status:</strong>
+                  <span style={{
+                    color: t.status === "active" ? "green" : "orange",
+                    fontWeight: "600",
+                    marginLeft: "8px"
+                  }}>
+                    {t.status.charAt(0).toUpperCase() + t.status.slice(1)}
+                  </span>
+                </p>
+                <p>
+                  <strong>Progress:</strong>
+                  {t.phases.filter(p => p.completed).length} of {t.phases.length} phases completed
                 </p>
               </div>
             ))}
