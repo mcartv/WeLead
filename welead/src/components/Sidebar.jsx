@@ -58,10 +58,10 @@ export default function Sidebar({ user, handleLogout }) {
               <span className="label">Review & Management</span>
             </Link>
 
-            <Link to="/admin-panel" className="sidebar-item">
+            {/* <Link to="/admin-panel" className="sidebar-item">
               <FaTasks className="icon" />
               <span className="label">Service Requests</span>
-            </Link>
+            </Link> */}
 
             <Link to="/admin-portfolio" className="sidebar-item">
               <FaImages className="icon" />

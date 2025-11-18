@@ -161,7 +161,7 @@ export default function ProjectTracker({ user, handleLogout }) {
       {selectedProject && (
         <div className="tracker-modal-overlay" onClick={closeProjectModal}>
           <div className="tracker-modal-box" onClick={e => e.stopPropagation()}>
-            <button className="close-btn" onClick={closeProjectModal}>x</button>
+            <button className="tracker-modal-close-btn" onClick={closeProjectModal}>x</button>
             <h2>{selectedProject.name}</h2>
             <p><strong>Client:</strong> {selectedProject.client}</p>
 

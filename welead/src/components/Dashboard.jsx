@@ -308,7 +308,7 @@ const AdminDashboard = ({ user, handleLogout }) => {
           {showInquiry && (
             <div className="modal-overlay" onClick={() => setShowInquiry(false)}>
               <div className="modal-box inquiry-grid-modal" onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={() => setShowInquiry(false)}>×</button>
+                <button className="tracker-modal-close-btn" onClick={() => setShowInquiry(false)}>×</button>
 
                 <div className="inquiry-grid-modal">
                   {requests.map((req) => (
