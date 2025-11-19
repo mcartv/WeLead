@@ -22,7 +22,6 @@ export default function ServiceRequest({ user, handleLogout }) {
     const { name, value } = e.target;
     let updatedData = { ...formData, [name]: value };
 
-    // Convenience fee for ASAP timeline
     if (name === "timelinePriority") {
       updatedData.convenienceFee = value === "ASAP" ? 5000 : 0;
     }
@@ -89,30 +88,22 @@ export default function ServiceRequest({ user, handleLogout }) {
     <>
       <Navbar user={user} handleLogout={handleLogout} />
 
-      {/* CHANGED: admin-review-container to client-admin-review-container */}
-      <div className="client-admin-review-container">
+      <div className="client-admin-review-container-light">
         <h1>Service Request Form</h1>
-        <p>Tell us about your project. Your account details will be used automatically.</p>
-
-        <section className="form-section">
-          {/* CHANGED: service-form-grid to client-service-form-grid */}
-          <form className="client-service-form-grid" onSubmit={handleOpenModal}>
-            {/* SERVICE TYPE */}
-            {/* CHANGED: form-group-dark to client-form-group-dark */}
-            <div className="client-form-group-dark">
-              <label>Service Type</label>
+        <section className="form-section-light">
+          <form className="client-service-form-grid-light" onSubmit={handleOpenModal}>
+            <div className="client-form-group-light">
+              <label>Construction Type</label>
               <select name="serviceType" value={formData.serviceType} onChange={handleChange}>
-                <option>Consultation</option>
-                <option>Site Visit</option>
+                <option>Residential</option>
+                <option>Commercial</option>
+                <option>Subdivision</option>
                 <option>Renovation Project</option>
-                <option>New Construction</option>
                 <option>Interior Design</option>
-                <option>Drafting / 3D Visualization</option>
               </select>
             </div>
 
-            {/* LOCATION */}
-            <div className="client-form-group-dark">
+            <div className="client-form-group-light">
               <label>Project Location</label>
               <input
                 type="text"
@@ -124,8 +115,7 @@ export default function ServiceRequest({ user, handleLogout }) {
               />
             </div>
 
-            {/* CONTACT NUMBER */}
-            <div className="client-form-group-dark">
+            <div className="client-form-group-light">
               <label>Contact Number</label>
               <input
                 type="tel"
@@ -140,8 +130,7 @@ export default function ServiceRequest({ user, handleLogout }) {
               />
             </div>
 
-            {/* BUDGET */}
-            <div className="client-form-group-dark">
+            <div className="client-form-group-light">
               <label>Estimated Budget</label>
               <select name="budgetRange" value={formData.budgetRange} onChange={handleChange} required>
                 <option value="">Select a range</option>
@@ -153,8 +142,7 @@ export default function ServiceRequest({ user, handleLogout }) {
               </select>
             </div>
 
-            {/* TIMELINE */}
-            <div className="client-form-group-dark">
+            <div className="client-form-group-light">
               <label>Project Timeline / Priority</label>
               <select name="timelinePriority" value={formData.timelinePriority} onChange={handleChange} required>
                 <option value="">Select timeline</option>
@@ -165,8 +153,7 @@ export default function ServiceRequest({ user, handleLogout }) {
               </select>
             </div>
 
-            {/* REFERRAL SOURCE */}
-            <div className="client-form-group-dark">
+            <div className="client-form-group-light">
               <label>How did you hear about us?</label>
               <select
                 name="referralSource"
@@ -184,9 +171,7 @@ export default function ServiceRequest({ user, handleLogout }) {
               </select>
             </div>
 
-            {/* DESCRIPTION */}
-            {/* CHANGED: form-group-dark form-fullwidth-dark to client-form-group-dark client-form-fullwidth-dark */}
-            <div className="client-form-group-dark client-form-fullwidth-dark">
+            <div className="client-form-group-light client-form-fullwidth-light">
               <label>Project Description</label>
               <textarea
                 name="description"
@@ -197,30 +182,21 @@ export default function ServiceRequest({ user, handleLogout }) {
               ></textarea>
             </div>
 
-            {/* SUBMIT */}
-            {/* CHANGED: form-group-dark form-fullwidth-dark btn-container to client-form-group-dark client-form-fullwidth-dark client-btn-container */}
-            <div className="client-form-group-dark client-form-fullwidth-dark client-btn-container">
-              {/* CHANGED: submit-btn-dark to client-submit-btn-dark */}
-              <button className="client-submit-btn-dark" onClick={handleOpenModal}>
+            <div className="client-form-group-light client-form-fullwidth-light client-btn-container-light">
+              <button className="client-submit-btn-light" onClick={handleOpenModal}>
                 Submit Request
               </button>
-              {/* CHANGED: success-text-dark to client-success-text-dark */}
-              {success && <p className="client-success-text-dark">✔ Request submitted successfully!</p>}
+              {success && <p className="client-success-text-light">✔ Request submitted successfully!</p>}
             </div>
           </form>
         </section>
       </div>
 
-      {/* CONFIRMATION MODAL */}
       {showModal && (
-        /* CHANGED: -cli-modal-overlay to client-modal-overlay */
-        <div className="client-modal-overlay">
-          {/* CHANGED: cli-modal-content to client-modal-content */}
-          <div className="client-modal-content">
-            {/* CHANGED: cli-modal-title to client-modal-title */}
-            <h2 className="client-modal-title">Confirm Your Request</h2>
-            {/* CHANGED: confirmation-list to client-confirmation-list */}
-            <div className="client-confirmation-list">
+        <div className="client-modal-overlay-light">
+          <div className="client-modal-content-light">
+            <h2 className="client-modal-title-light">Confirm Your Request</h2>
+            <div className="client-confirmation-list-light">
               <p><strong>Service Type:</strong> {formData.serviceType}</p>
               <p><strong>Project Location:</strong> {formData.projectLocation}</p>
               <p><strong>Contact Number:</strong> {formData.contactNumber}</p>
@@ -231,12 +207,9 @@ export default function ServiceRequest({ user, handleLogout }) {
               )}
               <p><strong>Description:</strong> {formData.description || "No description added"}</p>
             </div>
-            {/* CHANGED: cli-modal-buttons to client-modal-buttons */}
-            <div className="client-modal-buttons">
-              {/* CHANGED: cli-cancel-btn to client-cancel-btn */}
-              <button className="client-cancel-btn" onClick={() => setShowModal(false)}>Review Again</button>
-              {/* CHANGED: cli-submit-btn to client-submit-btn */}
-              <button className="client-submit-btn" onClick={handleSubmit}>Submit Request</button>
+            <div className="client-modal-buttons-light">
+              <button className="client-cancel-btn-light" onClick={() => setShowModal(false)}>Review Again</button>
+              <button className="client-submit-btn-light" onClick={handleSubmit}>Submit Request</button>
             </div>
           </div>
         </div>

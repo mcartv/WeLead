@@ -1,100 +1,87 @@
-/* ==================================== */
-/* DARK MODE CLIENT SERVICE REQUEST FORM STYLE */
-/* ==================================== */
-
-.client-admin-review-container {
+.client-admin-review-container-light {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #1e1f25;
-  padding: 28px 32px;
+  background: #dddddd;
+  padding: 40px 32px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   max-width: 960px;
-  margin: 20px auto;
-  color: #ffffff !important; /* ADDED: Main text color */
+  margin: 10px auto;
+  color: #1a1a1a !important;
 }
 
-/* ADDED: Header text styles */
-.client-admin-review-container h1 {
+.client-admin-review-container-light h1 {
   font-size: 2rem;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   text-align: center;
-  color: #c8a058 !important;
+  color: #1a1a1a !important;
 }
 
-.client-admin-review-container > p {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #e0e0e0 !important;
-  opacity: 0.9;
-}
-
-.client-service-form-grid {
-  margin-top: 30px;
+.client-service-form-grid-light {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  gap: 20px;
   width: 800px;
 }
 
-.client-form-group-dark {
+.client-form-group-light {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #ffffff !important; /* ADDED: Form group text color */
+  color: #1a1a1a !important;
 }
 
-.client-form-group-dark label {
+.client-form-group-light label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #c8a058;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
-.client-form-group-dark input,
-.client-form-group-dark select,
-.client-form-group-dark textarea {
-  background: #121317;
-  border: 1px solid #2b2c33;
+.client-form-group-light input,
+.client-form-group-light select,
+.client-form-group-light textarea {
+  background: #ffffff;
+  border: 1px solid #ccc;
   padding: 12px 14px;
   border-radius: 8px;
   font-size: 0.95rem;
-  color: #e0e0e0;
+  color: #1a1a1a;
   transition: 0.25s ease;
 }
 
-/* ADDED: Placeholder text color */
-.client-form-group-dark input::placeholder,
-.client-form-group-dark textarea::placeholder {
-  color: #888 !important;
+.client-form-group-light input::placeholder,
+.client-form-group-light textarea::placeholder {
+  color: #888;
   opacity: 0.7;
 }
 
-.client-form-group-dark input:focus,
-.client-form-group-dark select:focus,
-.client-form-group-dark textarea:focus {
-  border-color: #c8a058;
-  box-shadow: 0 0 0 2px rgba(200, 160, 88, 0.25);
+.client-form-group-light input:focus,
+.client-form-group-light select:focus,
+.client-form-group-light textarea:focus {
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(136, 136, 136, 0.25);
   outline: none;
 }
 
-.client-form-fullwidth-dark {
+.client-form-fullwidth-light {
   grid-column: span 2;
 }
 
-.client-btn-container {
+.client-btn-container-light {
   display: flex;
   flex-direction: column;
   gap: 8px;
   grid-column: span 2;
 }
 
-.client-submit-btn-dark {
-  background: #c8a058;
-  color: #121317;
+.client-submit-btn-light {
+  background: #888;
+  color: #ffffff;
   padding: 14px 20px;
   border-radius: 10px;
   border: none;
@@ -104,11 +91,11 @@
   width: 100%;
 }
 
-.client-submit-btn-dark:hover {
-  background: #e0be6f;
+.client-submit-btn-light:hover {
+  background: #666;
 }
 
-.client-success-text-dark {
+.client-success-text-light {
   color: #2ecc71;
   font-size: 0.95rem;
   text-align: center;
@@ -117,132 +104,189 @@
 
 /* Mobile */
 @media screen and (max-width: 768px) {
-  .client-service-form-grid {
+  .client-service-form-grid-light {
     grid-template-columns: 1fr;
   }
 
-  .client-form-fullwidth-dark {
+  .client-form-fullwidth-light {
     grid-column: span 1;
   }
 
-  .client-btn-container {
+  .client-btn-container-light {
     grid-column: span 1;
   }
 }
 
-/* ============================= */
-/* CLIENT CONFIRMATION MODAL (DARK THEME) */
-/* ============================= */
-
-.client-modal-overlay {
+/* Modal */
+.client-modal-overlay-light {
   font-family: 'MetroPolis', sans-serif;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 3000;
-  -webkit-backdrop-filter: blur(12px); /* Safari/iOS */
-  backdrop-filter: blur(12px); /* Standard */
 }
 
-.client-modal-content {
-  background: #1e1f25;
+.client-modal-content-light {
+  background: #dddddd;
   border-radius: 14px;
   max-width: 520px;
   width: 90%;
   padding: 40px;
-  border: 1px solid rgba(200, 160, 88, 0.25);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-  animation: clientModalPop 0.22s ease-out;
-  color: #ffffff !important; /* ADDED: Modal text color */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  color: #1a1a1a !important;
 }
 
-@keyframes clientModalPop {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.97);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.client-modal-title {
+.client-modal-title-light {
   font-size: 22px;
   font-weight: 700;
-  color: #c8a058;
+  color: #333333;
   margin-bottom: 22px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.client-confirmation-list {
+.client-confirmation-list-light {
   display: grid;
   gap: 12px;
   margin-bottom: 26px;
   font-size: 0.95rem;
 }
 
-.client-confirmation-list p {
-  background: #17181d;
+.client-confirmation-list-light p {
+  background: #f5f5f5;
   padding: 12px 16px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: #d6d6d6;
+  border: 1px solid #ccc;
+  color: #1a1a1a;
 }
 
-.client-confirmation-list strong {
-  color: #c8a058;
+.client-confirmation-list-light strong {
+  color: #333333;
 }
 
-.client-modal-buttons {
+.client-modal-buttons-light {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.client-submit-btn {
-  background: #c8a058;
-  color: #121317;
-  padding: 12px 22px;
-  border: none;
-  font-weight: 700;
-  border-radius: 8px;
+.client-submit-btn-light,
+.client-cancel-btn-light {
   cursor: pointer;
-  transition: 0.25s;
 }
 
-.client-submit-btn:hover {
-  background: #e0be6f;
-}
-
-.client-cancel-btn {
-  background: #27282d;
-  color: #e0e0e0;
+.client-cancel-btn-light {
+  background: #e0e0e0;
+  color: #1a1a1a;
   padding: 12px 22px;
   border-radius: 8px;
-  border: 1px solid #2d2e34;
-  cursor: pointer;
+  border: 1px solid #ccc;
   font-weight: 600;
   transition: 0.25s;
 }
 
-.client-cancel-btn:hover {
-  background: #34353c;
+.client-cancel-btn-light:hover {
+  background: #ccc;
 }
 
-/* ADDED: Ensure all text elements are visible */
-.form-section {
-  color: #ffffff !important;
-  width: 100%;
+
+
+/* Planner Container */
+.planner-container {
+  max-width: 1200px;
+  margin: 10px auto;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 13px;
 }
 
-/* ADDED: Global text visibility for any child elements */
-.client-admin-review-container * {
-  color: inherit;
+/* Grid layout for all main sections */
+.planner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 15px;
+}
+
+/* Each section as a card */
+.planner-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  overflow: auto;
+  height: 250px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section Titles */
+.planner-card h2 {
+  font-weight: normal;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.notif-planner-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  overflow: auto;
+  height: 250px;
+  width: 765px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Phase / Task Item styling inside cards */
+.client-phase-section, .task-item {
+  padding: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-size: 12px;
+}
+
+/* Progress bar smaller */
+.progress-bar {
+  height: 3px;
+  margin-top: 2px;
+  border-radius: 2px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+/* Forms & Inputs smaller */
+.planner-form select,
+.planner-form textarea,
+input[type="file"] {
+  width: 80%;
+  font-size: 12px;
+  padding: 4px;
+  margin-bottom: 10px;
+}
+
+.planner-form textarea {
+  height: 120px;
+}
+
+.planner-form button {
+  font-size: 12px;
+  padding: 4px 8px;
 }

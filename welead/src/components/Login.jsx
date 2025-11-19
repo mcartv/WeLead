@@ -77,10 +77,7 @@ function Login({ setUser }) {
         {error && <p style={{ color: "red", fontSize: "0.80rem" }}>{error}</p>}
 
         <p className="register">
-          Don't have an account?
-          <Link to="/register" className="register-link">
-            Register
-          </Link>
+          Don't have an account?  <Link to="/register" className="register-link">Register</Link>
         </p>
 
         <p className="back">

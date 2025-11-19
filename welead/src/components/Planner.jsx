@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import "./Planner.css";
+import React, { useState, useEffect } from "react";
+import Navbar from "./Navbar";
+import "./ClientStyles.css";
 
 const Planner = ({ user }) => {
+  // Tasks array only for timeline / deliverables
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -10,8 +12,6 @@ const Planner = ({ user }) => {
       progress: 80,
       status: "In Progress",
       dueDate: "2023-10-15",
-      client: "Client A",
-      approval: "Approved",
       deliverables: ["design_plan.pdf", "sketches.jpg"],
     },
     {
@@ -21,8 +21,6 @@ const Planner = ({ user }) => {
       progress: 50,
       status: "Pending",
       dueDate: "2023-10-20",
-      client: "Client A",
-      approval: "Pending",
       deliverables: [],
     },
     {
@@ -32,57 +30,82 @@ const Planner = ({ user }) => {
       progress: 0,
       status: "Not Started",
       dueDate: "2023-11-01",
-      client: "Client A",
-      approval: "Pending",
       deliverables: [],
     },
   ]);
 
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      taskId: 1,
-      request: "Extend review date by 1 week",
-      status: "Pending",
-      requestedBy: "Client A",
-      comments: "",
-    },
-  ]);
-
+  const [requests, setRequests] = useState([]);
   const [notifications] = useState([
     { id: 1, message: "Milestone 'Initial Design Review' updated to 80% complete.", date: "2023-10-10" },
     { id: 2, message: "Reminder: Approval Meeting scheduled for 2023-10-20.", date: "2023-10-09" },
   ]);
 
-  const [newRequest, setNewRequest] = useState({ taskId: "", request: "" });
+  const [newRequest, setNewRequest] = useState({ milestone: "", request: "" });
 
-  const submitRequest = (e) => {
+  const submitRequest = async (e) => {
     e.preventDefault();
-    if (!newRequest.taskId || !newRequest.request.trim()) return;
+    if (!newRequest.milestone || !newRequest.request.trim()) return;
 
-    // Ensure taskId is stored as a number for consistency
-    const taskId = parseInt(newRequest.taskId, 10);
+    const payload = {
+      milestone: newRequest.milestone, // selected milestone name
+      request: newRequest.request,
+      requestedBy: user?.name || "Anonymous",
+    };
 
-    setRequests((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        taskId,
-        request: newRequest.request,
-        status: "Pending",
-        requestedBy: user?.name || "Client A",
-        comments: "",
-      },
-    ]);
-    setNewRequest({ taskId: "", request: "" });
+    try {
+      const res = await fetch("http://localhost:5000/client_requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Failed to submit request:", err);
+        return;
+      }
+
+      const data = await res.json();
+      setRequests((prev) => [...prev, data.request]);
+      setNewRequest({ milestone: "", request: "" });
+    } catch (err) {
+      console.error("Error submitting request:", err);
+    }
   };
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/client_requests");
+        if (!res.ok) throw new Error("Failed to fetch requests");
+
+        const data = await res.json();
+        setRequests(data);
+      } catch (err) {
+        console.error("Error fetching requests:", err);
+        setRequests([]);
+      }
+    };
+
+    // Initial fetch
+    fetchRequests();
+
+    // Poll every 5 seconds
+    const interval = setInterval(fetchRequests, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const tasksWithStatus = tasks.map((task) => {
+    const matchingRequest = requests.find(r => r.milestone === task.name);
+    return matchingRequest
+      ? { ...task, status: matchingRequest.status, comments: matchingRequest.comments }
+      : task;
+  });
 
   const handleFileUpload = (taskId, files) => {
     const fileNames = Array.from(files).map((file) => file.name);
     setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, deliverables: [...t.deliverables, ...fileNames] } : t
-      )
+      prev.map((t) => (t.id === taskId ? { ...t, deliverables: [...t.deliverables, ...fileNames] } : t))
     );
   };
 
@@ -93,188 +116,112 @@ const Planner = ({ user }) => {
   }, {});
 
   return (
-    <div
-      style={{
-        marginTop: "120px",
-        color: "#333",
-        fontSize: "14px",
-        maxWidth: "800px",
-        margin: "120px auto 0",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <h1 style={{ marginBottom: "10px", fontWeight: "normal" }}>
-        📅 Client View → Planner / Scheduler
-      </h1>
-      <p style={{ marginBottom: "20px", fontSize: "12px", color: "#666" }}>
-        Track personal project timeline and send requests to admin.
-      </p>
+    <>
+      <Navbar user={user} />
 
-      {/* Timeline / Phases View */}
-      <div style={{ marginBottom: "20px" }}>
-        <h2 style={{ marginBottom: "15px", fontWeight: "normal" }}>📈 Timeline / Phases View</h2>
-        <p style={{ fontSize: "12px", color: "#666", marginBottom: "10px" }}>
-          See current progress (Design → Approval → Construction).
-        </p>
-        {phases.map((phase) => (
-          <div key={phase} style={{ marginBottom: "10px", padding: "10px", border: "1px solid #e0e0e0" }}>
-            <h3 style={{ marginBottom: "10px", fontSize: "16px" }}>{phase} Phase</h3>
-            {tasksByPhase[phase].length === 0 ? (
-              <p style={{ fontSize: "12px", color: "#666" }}>No milestones in this phase.</p>
-            ) : (
-              tasksByPhase[phase].map((t) => (
-                <div
-                  key={t.id}
-                  style={{
-                    marginBottom: "8px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    <strong>{t.name}</strong>
-                    <div style={{ fontSize: "12px", color: "#666" }}>
-                      Due: {t.dueDate} | Status: {t.status} | Approval: {t.approval}
-                    </div>
-                    <div style={{ marginTop: "5px" }}>
-                      Progress: {t.progress}%
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "4px",
-                          background: "#f0f0f0",
-                          marginTop: "2px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            height: "100%",
-                            width: `${t.progress}%`,
-                            background: "#333",
-                          }}
-                        ></div>
+      <div className="planner-container">
+        <h1>📅 Planner / Scheduler</h1>
+
+        {/* Timeline / Phases */}
+        <div className="planner-grid">
+          <div className="planner-card">
+            <h2>📈 Timeline / Phases</h2>
+            {phases.map((phase) => (
+              <div className="client-phase-section" key={phase}>
+                <h3>{phase} Phase</h3>
+                {tasksByPhase[phase].length === 0 ? (
+                  <p>No milestones in this phase.</p>
+                ) : (
+                  tasksByPhase[phase].map((t) => (
+                    <div className="task-item" key={t.id}>
+                      <div className="task-info">
+                        <h4>{t.name}</h4>
+                        <p>Due: {t.dueDate} | Status: {t.status} | Approval: {t.approval}</p>
+                        <div>
+                          Progress: {t.progress}%
+                          <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${t.progress}%` }}></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Deliverables Section */}
-      <div style={{ marginBottom: "20px", padding: "10px", border: "1px solid #e0e0e0" }}>
-        <h2 style={{ marginBottom: "10px", fontWeight: "normal" }}>📦 Deliverables Section</h2>
-        <p style={{ fontSize: "12px", color: "#666", marginBottom: "10px" }}>
-          Upload files and see accepted ones.
-        </p>
-        {tasks.map((t) => (
-          <div key={t.id} style={{ marginBottom: "10px" }}>
-            <h4>{t.name}</h4>
-            <div style={{ marginBottom: "5px" }}>
-              <strong>Accepted Deliverables:</strong>
-              {t.deliverables.length === 0 ? (
-                <span style={{ fontSize: "12px", color: "#666" }}> None</span>
-              ) : (
-                t.deliverables.map((d, idx) => (
-                  <a
-                    key={idx}
-                    href={`#${d}`}
-                    style={{ fontSize: "12px", color: "#007bff", marginRight: "5px" }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {d}
-                  </a>
-                ))
-              )}
-            </div>
-            <input
-              type="file"
-              multiple
-              onChange={(e) => handleFileUpload(t.id, e.target.files)}
-              style={{ fontSize: "12px" }}
-            />
-            <p style={{ fontSize: "10px", color: "#666" }}>Upload new files for this milestone.</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Request Adjustments Form */}
-      <div style={{ marginBottom: "20px", padding: "10px", border: "1px solid #e0e0e0" }}>
-        <h2 style={{ marginBottom: "10px", fontWeight: "normal" }}>💬 Request Adjustments Form</h2>
-        <p style={{ fontSize: "12px", color: "#666", marginBottom: "10px" }}>
-          Ask for extensions or approval changes.
-        </p>
-        <form onSubmit={submitRequest} style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-          <select
-            value={newRequest.taskId}
-            onChange={(e) => setNewRequest({ ...newRequest, taskId: e.target.value })}
-            required
-            style={{ padding: "5px", fontSize: "12px" }}
-          >
-            <option value="">Select Milestone</option>
-            {tasks.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
+                  ))
+                )}
+              </div>
             ))}
-          </select>
-          <textarea
-            placeholder="Describe your request (e.g., extend date by 1 week or change approval status)..."
-            value={newRequest.request}
-            onChange={(e) => setNewRequest({ ...newRequest, request: e.target.value })}
-            required
-            style={{ padding: "5px", fontSize: "12px", resize: "vertical", minHeight: "60px" }}
-          />
-          <button type="submit" style={{ padding: "5px 10px", fontSize: "12px", alignSelf: "flex-start" }}>
-            Submit Request
-          </button>
-        </form>
-      </div>
-
-      {/* Approval Status Tracker */}
-      <div style={{ marginBottom: "20px", padding: "10px", border: "1px solid #e0e0e0" }}>
-        <h2 style={{ marginBottom: "10px", fontWeight: "normal" }}>📑 Approval Status Tracker</h2>
-        <p style={{ fontSize: "12px", color: "#666", marginBottom: "10px" }}>
-          See what’s approved or still pending.
-        </p>
-        {requests.map((r) => {
-          const task = tasks.find((t) => t.id === r.taskId);
-          return (
-            <div key={r.id} style={{ marginBottom: "5px", padding: "5px", border: "1px solid #e0e0e0" }}>
-              <div style={{ fontSize: "12px" }}>
-                <strong>Milestone:</strong> {task ? task.name : "Unknown"}
-              </div>
-              <div style={{ fontSize: "12px" }}>
-                <strong>Request:</strong> {r.request}
-              </div>
-              <div style={{ fontSize: "12px" }}>
-                <strong>Status:</strong> {r.status}
-              </div>
-              {r.comments && (
-                <div style={{ fontSize: "12px" }}>
-                  <strong>Comments:</strong> {r.comments}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Notifications */}
-      <div style={{ padding: "10px", border: "1px solid #e0e0e0" }}>
-        <h2 style={{ marginBottom: "10px", fontWeight: "normal" }}>🕓 Notifications</h2>
-        {notifications.map((n) => (
-          <div key={n.id} style={{ marginBottom: "5px", padding: "5px", border: "1px solid #e0e0e0" }}>
-            <p style={{ margin: "0", fontSize: "12px" }}>{n.message}</p>
-            <small style={{ fontSize: "10px", color: "#666" }}>{n.date}</small>
           </div>
-        ))}
+
+          {/* Deliverables */}
+          <div className="planner-card">
+            <h2>📦 Deliverables</h2>
+            {tasks.map((t) => (
+              <div key={t.id} className="client-phase-section">
+                <h4>{t.name}</h4>
+                <p>
+                  <strong>Accepted:</strong> {t.deliverables.length ? t.deliverables.join(", ") : "None"}
+                </p>
+                <input type="file" multiple onChange={(e) => handleFileUpload(t.id, e.target.files)} />
+              </div>
+            ))}
+          </div>
+
+          {/* Request Form */}
+          <div className="planner-card">
+            <h2>💬 Request Adjustments</h2>
+            <form className="planner-form" onSubmit={submitRequest}>
+              <select
+                value={newRequest.milestone}
+                onChange={(e) => setNewRequest({ ...newRequest, milestone: e.target.value })}
+                required
+              >
+                <option value="">Select Milestone</option>
+                <option value="Initial Design Review">Initial Design Review</option>
+                <option value="Approval Meeting">Approval Meeting</option>
+                <option value="Foundation Construction">Foundation Construction</option>
+                <option value="Site Inspection">Site Inspection</option>
+                <option value="Final Handover">Final Handover</option>
+              </select>
+              <textarea
+                value={newRequest.request}
+                onChange={(e) => setNewRequest({ ...newRequest, request: e.target.value })}
+                placeholder="Describe your request..."
+                required
+              />
+              <button type="submit">Submit Request</button>
+            </form>
+          </div>
+
+          {/* Approval Tracker */}
+          <div className="planner-card">
+            <h2>📑 Approval Status</h2>
+            {requests.map((r) => (
+              <div className="task-item" key={r._id || r.id}>
+                <div className="task-info">
+                  <p><strong>Milestone:</strong> {r.milestone}</p>
+                  <p><strong>Request:</strong> {r.request}</p>
+                  <p><strong>Status:</strong> {r.status}</p>
+                  {r.status === "Scheduled" && r.scheduled_date && (
+                    <p><strong>Scheduled Date:</strong> {new Date(r.scheduled_date).toLocaleDateString()}</p>
+                  )}
+                  {r.comments && <p><strong>Comments:</strong> {r.comments}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Notifications */}
+          <div className="notif-planner-card">
+            <h2>🕓 Notifications</h2>
+            {notifications.map((n) => (
+              <div key={n.id} className="task-item">
+                <p>{n.message}</p>
+                <small>{n.date}</small>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

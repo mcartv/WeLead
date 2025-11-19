@@ -50,19 +50,15 @@ function App() {
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/guest" element={<PortfolioCards showBackToLogin={true} />} />
 
         {/* Protected routes with Layout */}
         <Route
           element={user ? <Layout handleLogout={handleLogout} user={user} /> : <Navigate to="/login" />}
         >
           <Route path="/home" element={<Home sectionRefs={sectionRefs} introRef={introRef} user={user} />} />
-          <Route path="/planner" element={<Planner />} />
+          <Route path="/planner" element={<Planner user={user} handleLogout={handleLogout} />} />
           <Route path="/form" element={<Form user={user} handleLogout={handleLogout} />} />
           <Route path="/ProjectTracker" element={<ProjectTracker user={user} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/admin-area" element={<AdminArea />} />
 
           {/* Admin-only routes */}
           <Route

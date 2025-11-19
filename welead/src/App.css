@@ -22,11 +22,13 @@
 /* ============================ */
 /* ===== GLOBAL STYLES ======== */
 /* ============================ */
+#root {
+    background: #f3eee7;
+}
 body {
     margin: 0;
     font-family: 'Overcame', sans-serif;
     background-color: #f3eee7;
-    /* beige */
     color: #1a1a1a;
     scroll-behavior: smooth;
     box-sizing: border-box;
@@ -140,6 +142,7 @@ button {
     color: #1a1a1a;
     background-color: transparent;
     margin: 0;
+    overflow: hidden;
 }
 
 .nav-right {

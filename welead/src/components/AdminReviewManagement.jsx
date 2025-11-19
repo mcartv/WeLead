@@ -152,52 +152,6 @@ const AdminReviewManagement = React.memo(({ user, handleLogout }) => {
                 ))}
               </div>
             </div>
-
-            {/* Client Requests Section */}
-            <div className="section client-requests">
-              <h2>Client Requests</h2>
-              {requests.length === 0 ? (
-                <p>No pending requests.</p>
-              ) : (
-                <div className="client-requests-grid">
-                  {requests.map((r) => (
-                    <div key={r.id} className="request-card">
-                      <div>
-                        <h4>{tasks.find((t) => t.id === r.taskId)?.name || "Unknown Project"}</h4>
-                        <p><strong>Request:</strong> {r.request}</p>
-                        <p><strong>Requested By:</strong> {r.requestedBy}</p>
-                        <p><strong>Status:</strong>
-                          <span style={{
-                            color: r.status === "Approved" ? "green" :
-                              r.status === "Rejected" ? "red" :
-                                r.status === "Rescheduled" ? "orange" : "blue",
-                            fontWeight: "600",
-                            marginLeft: "8px"
-                          }}>
-                            {r.status}
-                          </span>
-                        </p>
-
-                        {r.status === "Pending" && (
-                          <div className="request-actions">
-                            <button onClick={() => approveRequest(r.id)}>Approve</button>
-                            <button onClick={() => denyRequest(r.id)}>Reject</button>
-                            <button onClick={() => rescheduleRequest(r.id)}>Reschedule</button>
-                          </div>
-                        )}
-
-                        <textarea
-                          value={r.comments}
-                          onChange={(e) => addComment(r.id, e.target.value)}
-                          placeholder="Add comments..."
-                          rows="3"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
 

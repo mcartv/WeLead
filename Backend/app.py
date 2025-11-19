@@ -19,7 +19,7 @@ db = client["WELEAD"]
 users = db["users"]
 projects = db["projects"]
 portfolio = db["portfolio"]
-timesheet = db["project_files"]
+client_requests = db["client_requests"]
 services = db["services"]
 planner = db["report"]
 notifications = db["notifications"]
@@ -712,6 +712,120 @@ def update_project_phase(id, phase_index):
         print("❌ ERROR updating project phase:", e)
         return jsonify({"error": str(e)}), 500
 
+
+
+@app.route("/projects/<id>/archive", methods=["PUT"])
+def archive_project(id):
+    try:
+        project = projects.find_one({"_id": ObjectId(id)})
+        if not project:
+            return jsonify({"error": "Project not found"}), 404
+
+        # Ensure all phases are completed AND project is approved
+        if not project.get("approved", False):
+            return jsonify({"error": "Cannot archive unapproved project"}), 400
+        if any(not ph.get("completed", False) for ph in project.get("phases", [])):
+            return jsonify({"error": "Cannot archive project with incomplete phases"}), 400
+
+        projects.update_one({"_id": ObjectId(id)}, {"$set": {"archived": True}})
+
+        project["_id"] = str(project["_id"])
+        project["archived"] = True
+        return jsonify(project), 200
+
+    except Exception as e:
+        print("❌ ERROR archiving project:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+# -------------------------------
+# ADD REQUEST - CLIENT SIDE
+# -------------------------------
+@app.route("/client_requests", methods=["POST"])
+def add_client_request():
+    try:
+        data = request.get_json()
+        milestone = data.get("milestone")
+        request_text = data.get("request")
+        requested_by = data.get("requestedBy", "Anonymous")
+
+        if not milestone or not request_text:
+            return jsonify({"error": "Milestone and request text are required"}), 400
+
+        new_request = {
+            "milestone": milestone,  # store the milestone name directly
+            "request": request_text,
+            "requested_by": requested_by,
+            "status": "Pending",
+            "comments": "",
+            "submitted_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+
+        result = db.client_requests.insert_one(new_request)
+        new_request["_id"] = str(result.inserted_id)
+
+        return jsonify({"message": "Request submitted successfully", "request": new_request}), 201
+
+    except Exception as e:
+        print("❌ ERROR adding client request:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+# -------------------------------
+# FETCH REQUEST - ADMIN SIDE
+# -------------------------------
+@app.route("/client_requests", methods=["GET"])
+def get_client_requests():
+    try:
+        requests_list = list(db.client_requests.find().sort("submitted_at", -1))
+        for r in requests_list:
+            r["_id"] = str(r["_id"])
+        return jsonify(requests_list), 200
+
+    except Exception as e:
+        print("❌ ERROR fetching client requests:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+# -------------------------------
+# UPDATE REQUEST - ADMIN SIDE
+# -------------------------------
+@app.route("/client_requests/<id>", methods=["PUT"])
+def update_client_request(id):
+    try:
+        data = request.get_json()
+        update_fields = {}
+
+        if "status" in data:
+            update_fields["status"] = data["status"]
+        if "comments" in data:
+            update_fields["comments"] = data["comments"]
+        if "scheduled_date" in data:
+            update_fields["scheduled_date"] = datetime.fromisoformat(data["scheduled_date"])
+
+        update_fields["updated_at"] = datetime.utcnow()
+
+        result = db.client_requests.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": update_fields}
+        )
+
+        if result.matched_count == 0:
+            return jsonify({"error": "Request not found"}), 404
+
+        updated_request = db.client_requests.find_one({"_id": ObjectId(id)})
+        updated_request["_id"] = str(updated_request["_id"])
+        return jsonify(updated_request), 200
+
+    except Exception as e:
+        print("❌ ERROR updating client request:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 

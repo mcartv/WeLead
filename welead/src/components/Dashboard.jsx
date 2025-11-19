@@ -4,10 +4,13 @@ import "./AdminStyles.css";
 import Navbar from "./Navbar";
 
 const AdminDashboard = ({ user, handleLogout }) => {
+  const [clientRequests, setClientRequests] = useState([]);
+  const [showRequestsModal, setShowRequestsModal] = useState(false);
   const [showInquiry, setShowInquiry] = useState(false);
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [appointmentDate, setAppointmentDate] = useState("");
+  const [requestBeingScheduled, setRequestBeingScheduled] = useState(null);
   const navigate = useNavigate();
   const [projectsCount, setProjectsCount] = useState({
     pending: 0,
@@ -28,6 +31,20 @@ const AdminDashboard = ({ user, handleLogout }) => {
       }
     };
     fetchRequests();
+  }, []);
+
+  useEffect(() => {
+    const fetchClientRequests = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/client_requests");
+        const data = await res.json();
+        setClientRequests(data);  // <-- data is an array of requests
+      } catch (err) {
+        console.error("Failed to fetch client requests", err);
+        setClientRequests([]);  // fallback empty array
+      }
+    };
+    fetchClientRequests();
   }, []);
 
   const fetchProjects = async () => {
@@ -77,31 +94,43 @@ const AdminDashboard = ({ user, handleLogout }) => {
 
   // Approve inquiry
   const handleApprove = async (req) => {
-    const response = await fetch(`http://localhost:5000/update_request/${req._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "Approved" }),
-    });
-    if (response.ok) {
-      const updated = await response.json();
-      setRequests(prev => prev.map(r => r._id === req._id ? updated : r));
-      setSelectedRequest(updated);
-      alert("Inquiry approved!");
+    try {
+      const res = await fetch(`http://localhost:5000/client_requests/${req._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Approved" }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setClientRequests(prev => prev.map(r => r._id === req._id ? updated : r));
+        setRequests(prev => prev.map(r => r._id === req._id ? updated : r));
+        setSelectedRequest(updated);
+        alert("Inquiry approved!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to approve inquiry");
     }
   };
 
   // Decline inquiry
   const handleDecline = async (req) => {
-    const response = await fetch(`http://localhost:5000/update_request/${req._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "Archived" }),
-    });
-    if (response.ok) {
-      const updated = await response.json();
-      setRequests(prev => prev.map(r => r._id === req._id ? updated : r));
-      setSelectedRequest(updated);
-      alert("Inquiry archived!");
+    try {
+      const res = await fetch(`http://localhost:5000/client_requests/${req._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Archived" }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setClientRequests(prev => prev.map(r => r._id === req._id ? updated : r));
+        setRequests(prev => prev.map(r => r._id === req._id ? updated : r));
+        setSelectedRequest(updated);
+        alert("Inquiry archived!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to decline inquiry");
     }
   };
 
@@ -300,7 +329,7 @@ const AdminDashboard = ({ user, handleLogout }) => {
                 📨 View Inquiries
               </button>
               <button className="quick-action-btn">📅 Deadlines</button>
-              <button className="quick-action-btn">👤 Assign Team</button>
+              <button className="quick-action-btn" onClick={() => setShowRequestsModal(true)}>📨 Client Requests</button>
             </div>
           </div>
 
@@ -325,6 +354,98 @@ const AdminDashboard = ({ user, handleLogout }) => {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* REQUEST MODAL */}
+          {showRequestsModal && (
+            <div className="modal-overlay" onClick={() => setShowRequestsModal(false)}>
+              <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close-btn" onClick={() => setShowRequestsModal(false)}>×</button>
+                <h3>Client Requests</h3>
+
+                {clientRequests.length === 0 ? (
+                  <p>No requests yet.</p>
+                ) : (
+                  <div className="client-requests-grid">
+                    {clientRequests.map((r) => {
+                      return (
+                        <div key={r._id} className="request-card">
+                          <h4>{r.milestone}</h4>
+                          <p><strong>Request:</strong> {r.request}</p>
+                          <p><strong>Requested By:</strong> {r.requested_by}</p>
+                          <p><strong>Status:</strong> {r.status}</p>
+                          {r.comments && <p><strong>Comments:</strong> {r.comments}</p>}
+
+                          {/* Approve Button */}
+                          {r.status === "Pending" && (
+                            <button
+                              className="btn-primary"
+                              onClick={async () => {
+                                const res = await fetch(`http://localhost:5000/client_requests/${r._id}`, {
+                                  method: "PUT",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ status: "Approved" }),
+                                });
+                                if (res.ok) {
+                                  const updated = await res.json();
+                                  setClientRequests(prev => prev.map(req => req._id === r._id ? updated : req));
+                                  alert("Request approved!");
+                                }
+                              }}
+                            >
+                              Approve
+                            </button>
+                          )}
+
+                          {/* Schedule Appointment */}
+                          {r.status === "Approved" && (
+                            <div className="schedule-section">
+                              <label>Select Appointment Date:</label>
+                              <input
+                                type="date"
+                                value={requestBeingScheduled?._id === r._id ? appointmentDate : ""}
+                                onChange={(e) => {
+                                  setRequestBeingScheduled(r);       // track which request is being scheduled
+                                  setAppointmentDate(e.target.value); // track date
+                                }}
+                                min={new Date().toISOString().split("T")[0]}
+                              />
+                              <button
+                                className="schedule-btn"
+                                onClick={async () => {
+                                  if (!appointmentDate) return alert("Please select a valid date.");
+                                  if (!requestBeingScheduled) return;
+
+                                  try {
+                                    const res = await fetch(`http://localhost:5000/client_requests/${requestBeingScheduled._id}`, {
+                                      method: "PUT",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({ status: "Scheduled", scheduled_date: appointmentDate }),
+                                    });
+                                    if (res.ok) {
+                                      const updated = await res.json();
+                                      setClientRequests(prev => prev.map(req => req._id === updated._id ? updated : req));
+                                      setAppointmentDate("");
+                                      setRequestBeingScheduled(null); // clear schedule state
+                                      alert("Appointment scheduled!");
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
+                                    alert("Failed to schedule appointment");
+                                  }
+                                }}
+                              >
+                                Schedule
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           )}

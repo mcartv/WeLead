@@ -6,8 +6,8 @@ html {
     margin: 0;
     padding: 0;
     font-family: 'Overcame', sans-serif;
-    background-color: #121317;
-    color: #e0e0e0;
+    background-color: #f3eee7;
+    color: #1a1a1a;
     height: 100%;
 }
 
@@ -25,17 +25,13 @@ button {
     font-family: 'Overcame', sans-serif;
     font-size: 3rem;
     font-weight: 700;
-    color: #c8a058;
-    background-color: #1e1f25;
+    color: #1a1a1a;
+    background-color: #dddddd;
     margin-top: -40px;
     margin-bottom: 10px;
 }
 
-
-
 /* ============================================================== */
-
-
 
 .password-container {
     font-family: 'Metropolis', sans-serif;
@@ -57,7 +53,7 @@ button {
     align-items: center;
     gap: 4px;
     cursor: pointer;
-    color: #e0e0e0;
+    color: #1a1a1a;
 }
 
 .password-options input[type="checkbox"] {
@@ -67,7 +63,7 @@ button {
 }
 
 .forgot-password-link {
-    color: #c8a058;
+    color: #1a1a1a;
     text-decoration: none;
     transition: opacity 0.25s ease;
 }
@@ -82,16 +78,17 @@ button {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background: linear-gradient(135deg, #0d0e10 0%, #1a1b21 100%);
+    background: linear-gradient(135deg, #f3eee7 0%, #dddddd 100%);
 }
 
 .auth-container {
-    background-color: #1e1f25;
+    background-color: #dddddd;
+    border: 1px solid #1a1a1a;
     padding: 60px 40px 30px;
     border-radius: 12px;
     width: 350px;
     height: auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
 }
@@ -100,7 +97,7 @@ button {
     font-family: 'Metropolis', sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
-    color: #fff;
+    color: #1a1a1a;
     margin-bottom: 30px;
 }
 
@@ -115,52 +112,48 @@ button {
 select {
     padding: 12px 16px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: #121317;
-    color: #e0e0e0;
+    border: 1px solid #c8c8c8;
+    background: #f3eee7;
+    color: #1a1a1a;
     font-size: 0.85rem;
     transition: all 0.25s ease;
 }
 
 .auth-form input:focus {
     outline: none;
-    border-color: #c8a058;
-    box-shadow: 0 0 6px rgba(200, 160, 88, 0.6);
-    background-color: #1e1f25;
-    color: #e0e0e0;
+    border-color: #1a1a1a;
+    box-shadow: 0 0 6px rgba(200, 160, 88, 0.4);
+    background-color: #f3eee7;
+    color: #1a1a1a;
 }
 
 .auth-form button {
     padding: 0 16px 15px;
     border-radius: 6px;
-    background: #c8a058;
+    background: #1a1a1a;
     border: none;
-    color: #121317;
+    color: #f3eee7;
     font-weight: 500;
     font-size: 1rem;
     transition: all 0.25s ease;
 }
 
 .auth-form button:hover {
-    background: #e1b96b;
+    background: #333333;
 }
 
 .register,
 .back {
-    font-family: 'MetroPolis', sans-serif;
+    font-family: 'Metropolis', sans-serif;
     margin-top: 20px;
     font-size: 0.85rem;
-    background-color: #1e1f25;
+    background-color: #dddddd;
 }
 
-.register-link {
-    margin-left: 5px;
-    color: #c8a058;
-    font-weight: 500;
-}
-
+.register-link,
 .back-link {
-    color: #c8a058;
+    color: #1a1a1a;
+    text-decoration: underline;
     font-weight: 500;
 }
 
@@ -171,15 +164,15 @@ select {
 }
 
 .security-question {
-    font-family: 'MetroPolis', sans-serif;
+    font-family: 'Metropolis', sans-serif;
     font-size: 0.95rem;
 }
 
 .fp-auth-form button {
     border-radius: 6px;
-    background: #c8a058;
+    background: #1a1a1a;
     border: none;
-    color: #121317;
+    color: #f3eee7;
     font-weight: 500;
     font-size: 1.45rem;
     padding: 0 16px 15px;
@@ -187,10 +180,8 @@ select {
 }
 
 .fp-auth-form button:hover {
-    background: #e1b96b;
+    background: #333333;
 }
-
-
 
 /* ============================ */
 /* ===== RESPONSIVE ============ */
