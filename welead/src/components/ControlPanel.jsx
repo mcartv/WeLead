@@ -79,9 +79,11 @@ export default function ControlPanel({ user, handleLogout }) {
                                         <td>{u.role}</td>
                                         <td>{u.status || "active"}</td>
                                         <td>
-                                            <button onClick={() => toggleStatus(u._id, u.status || "active")}>
-                                                {u.status === "deactivated" ? "Activate" : "Deactivate"}
-                                            </button>
+                                            {u.role !== "admin" && (
+                                                <button onClick={() => toggleStatus(u._id, u.status || "active")}>
+                                                    {u.status === "deactivated" ? "Activate" : "Deactivate"}
+                                                </button>
+                                            )}
                                             <button
                                                 style={{ marginLeft: "8px" }}
                                                 onClick={() => setExpandedUserId(expandedUserId === u._id ? null : u._id)}

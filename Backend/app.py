@@ -526,12 +526,19 @@ def get_users():
             u["_id"] = str(u["_id"])
             u["firstName"] = u.get("first_name", "")
             u["lastName"] = u.get("last_name", "")
+            u["role"] = u.get("role", "client")
+            u["status"] = u.get("status", "active")
+            u["date_created"] = u.get("date_created", "")
+            
+            # Remove sensitive fields
             u.pop("password", None)
             u.pop("securityAnswer", None)
             u.pop("securityQuestion", None)
+        
         return jsonify({"users": all_users}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "react-hook-form": "^7.65.0"
   }
 }

@@ -141,17 +141,6 @@ function Home({ sectionRefs, introRef, user }) {
             <p>Architectural Designer</p>
           </div>
 
-          <div className="team-card">
-            <img src="/images/Buenavidez.png" alt="Engineer" />
-            <h3>Carl Arthur Buenavidez</h3>
-            <p>Structural Engineer</p>
-          </div>
-
-          <div className="team-card">
-            <img src="/images/Bho.jfif" alt="Quality Control" />
-            <h3>Jerry Geoff Bho</h3>
-            <p>Quality Control Specialist</p>
-          </div>
         </div>
       </section>
 

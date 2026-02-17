@@ -149,8 +149,8 @@ function AdminPortfolioGallery({ user, handleLogout }) {
             <option value="All">All Categories</option>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
-            <option value="Industrial">Industrial</option>
-            <option value="Other">Other</option>
+            <option value="Subdivision">Subdivision</option>
+            <option value="Renovation">Renovation</option>
           </select>
         </div>
 
@@ -184,8 +184,8 @@ function AdminPortfolioGallery({ user, handleLogout }) {
                     <option value="">Select category</option>
                     <option value="Residential">Residential</option>
                     <option value="Commercial">Commercial</option>
-                    <option value="Industrial">Industrial</option>
-                    <option value="Other">Other</option>
+                    <option value="Subdivision">Subdivision</option>
+                    <option value="Renovation">Renovation</option>
                   </select>
                 </div>
 
@@ -271,7 +271,7 @@ function AdminPortfolioGallery({ user, handleLogout }) {
                             className="delete-btn"
                             onClick={() => handleDelete(project._id)}
                           >
-                            Delete
+                            Archive
                           </button>
 
                           {/* FEATURED TOGGLE BUTTON */}

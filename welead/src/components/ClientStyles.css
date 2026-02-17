@@ -35,6 +35,7 @@
 }
 
 .client-form-group-light label {
+  font-family: 'Metropolis', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: #333333;
@@ -80,7 +81,8 @@
 }
 
 .client-submit-btn-light {
-  background: #888;
+  font-family: 'Metropolis', sans-serif;
+  background: #6e6e6e;
   color: #ffffff;
   padding: 14px 20px;
   border-radius: 10px;
