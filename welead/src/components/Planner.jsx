@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import "./Planner.css";
 
@@ -7,488 +7,290 @@ const Planner = ({ user }) => {
     {
       id: 1,
       name: "Riverfront Residence",
-      client: "Smith Family",
+      client: {
+        name: "Smith Family",
+        email: "smith.family@email.com",
+        phone: "(555) 123-4567",
+      },
       type: "Residential",
       status: "Design Development",
       progress: 65,
-      phase: "DD",
-      timeline: {
-        start: "2024-01-15",
-        end: "2024-06-30",
-        milestones: [
-          { name: "Schematic Design", date: "2024-02-28", completed: true },
-          { name: "Design Development", date: "2024-04-15", completed: false },
-          { name: "Construction Docs", date: "2024-05-30", completed: false },
-          { name: "Permitting", date: "2024-06-30", completed: false }
-        ]
-      },
-      team: [
-        { id: 1, name: "Maria Rodriguez", role: "Lead Architect", avatar: "👩‍💼" },
-        { id: 2, name: "James Chen", role: "Designer", avatar: "👨‍🎨" }
+      timeline: { start: "2024-01-15", end: "2024-06-30" },
+      team: ["Maria Rodriguez", "James Chen"],
+      budget: { total: 125000, spent: 78500 },
+      deliverables: ["Floor Plans", "3D Renderings", "Material Board"],
+      milestones: [
+        { name: "Schematic Design", completed: true, due: "2024-02-15" },
+        { name: "Design Development", completed: false, due: "2024-04-30" },
+        { name: "Construction Documents", completed: false, due: "2024-06-15" },
       ],
-      deliverables: [
-        { name: "Floor Plans", status: "In Progress", due: "2024-03-15" },
-        { name: "3D Renderings", status: "Not Started", due: "2024-03-30" },
-        { name: "Material Board", status: "Completed", due: "2024-02-20" }
-      ],
-      budget: { total: 125000, spent: 78500, remaining: 46500 },
-      lastUpdated: "2024-02-18"
     },
     {
       id: 2,
       name: "Downtown Coffee Hub",
-      client: "Brew & Co",
+      client: {
+        name: "Brew & Co",
+        email: "contact@brewco.com",
+        phone: "(555) 987-6543",
+      },
       type: "Commercial",
       status: "Schematic Design",
       progress: 35,
-      phase: "SD",
-      timeline: {
-        start: "2024-02-01",
-        end: "2024-08-15",
-        milestones: [
-          { name: "Schematic Design", date: "2024-03-20", completed: false },
-          { name: "Client Approval", date: "2024-04-05", completed: false },
-          { name: "Design Development", date: "2024-06-15", completed: false }
-        ]
+      timeline: { start: "2024-02-01", end: "2024-08-15" },
+      team: ["Sarah Johnson"],
+      budget: { total: 85000, spent: 25500 },
+      deliverables: ["Concept Sketches", "Site Analysis"],
+      milestones: [
+        { name: "Schematic Design", completed: true, due: "2024-03-01" },
+        { name: "Design Development", completed: false, due: "2024-05-15" },
+        { name: "Construction Documents", completed: false, due: "2024-07-30" },
+      ],
+    },
+    {
+      id: 3,
+      name: "Meadowbrook Subdivision",
+      client: {
+        name: "Greenfield Developers",
+        email: "info@greenfield.com",
+        phone: "(555) 555-1234",
       },
-      team: [
-        { id: 3, name: "Sarah Johnson", role: "Project Architect", avatar: "👩‍💼" }
+      type: "Subdivision",
+      status: "Construction Docs",
+      progress: 80,
+      timeline: { start: "2023-09-01", end: "2024-04-30" },
+      team: ["Maria Rodriguez", "David Lee"],
+      budget: { total: 450000, spent: 360000 },
+      deliverables: ["Site Plan", "Utility Layout", "Phase 1 Plots"],
+      milestones: [
+        { name: "Schematic Design", completed: true, due: "2023-10-15" },
+        { name: "Design Development", completed: true, due: "2023-12-20" },
+        { name: "Construction Documents", completed: false, due: "2024-03-30" },
       ],
-      deliverables: [
-        { name: "Concept Sketches", status: "In Progress", due: "2024-02-28" },
-        { name: "Site Analysis", status: "Completed", due: "2024-02-15" }
-      ],
-      budget: { total: 85000, spent: 25500, remaining: 59500 },
-      lastUpdated: "2024-02-16"
-    }
+    },
   ]);
 
-  const [activeView, setActiveView] = useState("dashboard");
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterType, setFilterType] = useState("all");
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  // Project phases in architectural workflow
-  const projectPhases = [
-    { id: "pd", name: "Pre-Design", color: "#8B9DC3", order: 1 },
-    { id: "sd", name: "Schematic Design", color: "#3B5998", order: 2 },
-    { id: "dd", name: "Design Development", color: "#FF6B35", order: 3 },
-    { id: "cd", name: "Construction Docs", color: "#004E89", order: 4 },
-    { id: "ca", name: "Construction Admin", color: "#00A896", order: 5 },
-    { id: "completed", name: "Completed", color: "#28A745", order: 6 }
-  ];
+  const statuses = ["Schematic Design", "Design Development", "Construction Docs", "Completed"];
+  const types = ["Residential", "Commercial", "Subdivision"];
 
-  const projectTypes = ["Residential", "Commercial", "Hospitality", "Institutional", "Mixed-Use"];
+  // Filter projects based on search and filters
+  const filteredProjects = projects.filter(
+    (p) =>
+      (p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.client.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (filterStatus === "all" || p.status === filterStatus) &&
+      (filterType === "all" || p.type === filterType)
+  );
 
-  // Filter projects
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.client.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === "all" || project.status === filterStatus;
-    const matchesType = filterType === "all" || project.type === filterType;
-    
-    return matchesSearch && matchesStatus && matchesType;
-  });
+  // Dashboard stats
+  const totalProjects = projects.length;
+  const activeProjects = projects.filter(p => p.status !== "Completed").length;
+  const completedProjects = projects.filter(p => p.status === "Completed").length;
+  const totalBudget = projects.reduce((sum, p) => sum + p.budget.total, 0);
+  const totalSpent = projects.reduce((sum, p) => sum + p.budget.spent, 0);
 
-  // Dashboard metrics
-  const dashboardMetrics = {
-    totalProjects: projects.length,
-    activeProjects: projects.filter(p => p.status !== "Completed").length,
-    totalBudget: projects.reduce((sum, p) => sum + p.budget.total, 0),
-    averageProgress: Math.round(projects.reduce((sum, p) => sum + p.progress, 0) / projects.length)
-  };
-
-  const openProjectDetails = (project) => {
-    setSelectedProject(project);
-    setIsProjectModalOpen(true);
-  };
-
-  const closeProjectModal = () => {
-    setIsProjectModalOpen(false);
-    setSelectedProject(null);
-  };
-
-  const updateProjectProgress = (projectId, newProgress) => {
-    setProjects(prev => prev.map(p => 
-      p.id === projectId ? { ...p, progress: newProgress } : p
-    ));
-  };
+  const openProjectModal = (project) => setSelectedProject(project);
+  const closeProjectModal = () => setSelectedProject(null);
 
   return (
-    <>
+    <div className="planner-page">
       <Navbar user={user} />
-      
-      <div className="architecture-planner">
-        {/* Header */}
-        <div className="planner-header">
-          <div className="header-left">
-            <h1>Studio Projects</h1>
-            <p>Managing {projects.length} active design projects</p>
-          </div>
-          <div className="header-right">
-            <div className="search-bar">
-              <input
-                type="text"
-                placeholder="Search projects or clients..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <span className="search-icon">🔍</span>
-            </div>
-            <button className="btn-primary">
-              + New Project
-            </button>
-          </div>
+
+      {/* Dashboard Stats */}
+      <div className="dashboard-stats">
+        <div className="stat-card">
+          <span className="stat-label">Total Projects</span>
+          <span className="stat-value">{totalProjects}</span>
         </div>
-
-        {/* Quick Stats */}
-        <div className="metrics-grid">
-          <div className="metric-card">
-            <div className="metric-icon">🏗️</div>
-            <div className="metric-info">
-              <h3>{dashboardMetrics.totalProjects}</h3>
-              <p>Total Projects</p>
-            </div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-icon">📈</div>
-            <div className="metric-info">
-              <h3>{dashboardMetrics.activeProjects}</h3>
-              <p>Active Projects</p>
-            </div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-icon">💰</div>
-            <div className="metric-info">
-              <h3>${(dashboardMetrics.totalBudget / 1000).toFixed(0)}K</h3>
-              <p>Total Budget</p>
-            </div>
-          </div>
-          <div className="metric-card">
-            <div className="metric-icon">🎯</div>
-            <div className="metric-info">
-              <h3>{dashboardMetrics.averageProgress}%</h3>
-              <p>Average Progress</p>
-            </div>
-          </div>
+        <div className="stat-card">
+          <span className="stat-label">Active</span>
+          <span className="stat-value">{activeProjects}</span>
         </div>
-
-        {/* View Controls */}
-        <div className="view-controls">
-          <div className="view-tabs">
-            <button 
-              className={`tab-btn ${activeView === "dashboard" ? "active" : ""}`}
-              onClick={() => setActiveView("dashboard")}
-            >
-              📊 Dashboard
-            </button>
-            <button 
-              className={`tab-btn ${activeView === "timeline" ? "active" : ""}`}
-              onClick={() => setActiveView("timeline")}
-            >
-              📅 Timeline
-            </button>
-            <button 
-              className={`tab-btn ${activeView === "phases" ? "active" : ""}`}
-              onClick={() => setActiveView("phases")}
-            >
-              🏛️ Phases
-            </button>
-          </div>
-          
-          <div className="filters">
-            <select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="all">All Statuses</option>
-              {projectPhases.map(phase => (
-                <option key={phase.id} value={phase.name}>{phase.name}</option>
-              ))}
-            </select>
-            
-            <select 
-              value={filterType} 
-              onChange={(e) => setFilterType(e.target.value)}
-            >
-              <option value="all">All Types</option>
-              {projectTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
+        <div className="stat-card">
+          <span className="stat-label">Completed</span>
+          <span className="stat-value">{completedProjects}</span>
         </div>
-
-        {/* Main Content */}
-        <div className="planner-content">
-          {activeView === "dashboard" && (
-            <div className="projects-grid">
-              {filteredProjects.map(project => (
-                <div 
-                  key={project.id} 
-                  className="project-card"
-                  onClick={() => openProjectDetails(project)}
-                >
-                  <div className="project-header">
-                    <div className="project-type">{project.type}</div>
-                    <div className="project-phase" style={{ 
-                      backgroundColor: projectPhases.find(p => p.name === project.status)?.color 
-                    }}>
-                      {project.status}
-                    </div>
-                  </div>
-                  
-                  <h3 className="project-name">{project.name}</h3>
-                  <p className="project-client">Client: {project.client}</p>
-                  
-                  <div className="progress-section">
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill"
-                        style={{ width: `${project.progress}%` }}
-                      ></div>
-                    </div>
-                    <span className="progress-text">{project.progress}% Complete</span>
-                  </div>
-                  
-                  <div className="project-timeline">
-                    <div className="timeline-info">
-                      <span>Start: {project.timeline.start}</span>
-                      <span>End: {project.timeline.end}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="project-team">
-                    <div className="team-avatars">
-                      {project.team.map(member => (
-                        <span key={member.id} className="avatar" title={`${member.name} - ${member.role}`}>
-                          {member.avatar}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="project-budget">
-                    <div className="budget-bar">
-                      <div 
-                        className="budget-spent"
-                        style={{ width: `${(project.budget.spent / project.budget.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <div className="budget-text">
-                      Budget: ${project.budget.spent.toLocaleString()} / ${project.budget.total.toLocaleString()}
-                    </div>
-                  </div>
-                  
-                  <div className="project-deliverables">
-                    <span className="deliverables-count">
-                      {project.deliverables.filter(d => d.status === "Completed").length}/
-                      {project.deliverables.length} deliverables
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeView === "timeline" && (
-            <div className="timeline-view">
-              <h3>Project Timeline</h3>
-              <div className="gantt-chart">
-                {projects.map(project => (
-                  <div key={project.id} className="gantt-row">
-                    <div className="gantt-project-info">
-                      <strong>{project.name}</strong>
-                      <span>{project.client}</span>
-                    </div>
-                    <div className="gantt-bar-container">
-                      <div 
-                        className="gantt-bar"
-                        style={{
-                          width: `${project.progress}%`,
-                          backgroundColor: projectPhases.find(p => p.name === project.status)?.color
-                        }}
-                      >
-                        <span className="gantt-milestones">
-                          {project.timeline.milestones.map((milestone, index) => (
-                            <div
-                              key={index}
-                              className={`milestone-marker ${milestone.completed ? 'completed' : ''}`}
-                              title={milestone.name}
-                            ></div>
-                          ))}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeView === "phases" && (
-            <div className="phases-view">
-              {projectPhases.map(phase => {
-                const phaseProjects = projects.filter(p => p.status === phase.name);
-                return (
-                  <div key={phase.id} className="phase-column">
-                    <div 
-                      className="phase-header"
-                      style={{ borderLeftColor: phase.color }}
-                    >
-                      <h4>{phase.name}</h4>
-                      <span className="project-count">{phaseProjects.length}</span>
-                    </div>
-                    <div className="phase-projects">
-                      {phaseProjects.map(project => (
-                        <div 
-                          key={project.id} 
-                          className="phase-project-card"
-                          onClick={() => openProjectDetails(project)}
-                        >
-                          <h5>{project.name}</h5>
-                          <p>{project.client}</p>
-                          <div className="phase-progress">
-                            <div className="mini-progress-bar">
-                              <div 
-                                className="mini-progress-fill"
-                                style={{ width: `${project.progress}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+        <div className="stat-card">
+          <span className="stat-label">Budget Utilization</span>
+          <span className="stat-value">
+            ${totalSpent.toLocaleString()} / ${totalBudget.toLocaleString()}
+          </span>
         </div>
-
-        {/* Project Detail Modal */}
-        {isProjectModalOpen && selectedProject && (
-          <div className="modal-overlay" onClick={closeProjectModal}>
-            <div className="project-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <div className="modal-title">
-                  <h2>{selectedProject.name}</h2>
-                  <p className="client-name">{selectedProject.client} • {selectedProject.type}</p>
-                </div>
-                <button className="close-btn" onClick={closeProjectModal}>×</button>
-              </div>
-              
-              <div className="modal-content">
-                <div className="modal-section">
-                  <h3>Project Overview</h3>
-                  <div className="overview-grid">
-                    <div className="overview-item">
-                      <label>Status</label>
-                      <span 
-                        className="status-badge"
-                        style={{ 
-                          backgroundColor: projectPhases.find(p => p.name === selectedProject.status)?.color 
-                        }}
-                      >
-                        {selectedProject.status}
-                      </span>
-                    </div>
-                    <div className="overview-item">
-                      <label>Progress</label>
-                      <div className="progress-control">
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          value={selectedProject.progress}
-                          onChange={(e) => updateProjectProgress(selectedProject.id, parseInt(e.target.value))}
-                        />
-                        <span>{selectedProject.progress}%</span>
-                      </div>
-                    </div>
-                    <div className="overview-item">
-                      <label>Timeline</label>
-                      <span>{selectedProject.timeline.start} to {selectedProject.timeline.end}</span>
-                    </div>
-                    <div className="overview-item">
-                      <label>Budget</label>
-                      <span>${selectedProject.budget.spent.toLocaleString()} / ${selectedProject.budget.total.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="modal-columns">
-                  <div className="modal-column">
-                    <h3>Milestones</h3>
-                    <div className="milestones-list">
-                      {selectedProject.timeline.milestones.map((milestone, index) => (
-                        <div key={index} className="milestone-item">
-                          <div className={`milestone-checkbox ${milestone.completed ? 'completed' : ''}`}>
-                            {milestone.completed ? '✓' : ''}
-                          </div>
-                          <div className="milestone-info">
-                            <strong>{milestone.name}</strong>
-                            <span>{milestone.date}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <h3>Team</h3>
-                    <div className="team-list">
-                      {selectedProject.team.map(member => (
-                        <div key={member.id} className="team-member">
-                          <span className="avatar">{member.avatar}</span>
-                          <div className="member-info">
-                            <strong>{member.name}</strong>
-                            <span>{member.role}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="modal-column">
-                    <h3>Deliverables</h3>
-                    <div className="deliverables-list">
-                      {selectedProject.deliverables.map((deliverable, index) => (
-                        <div key={index} className="deliverable-item">
-                          <span className="deliverable-name">{deliverable.name}</span>
-                          <span className={`deliverable-status ${deliverable.status.toLowerCase().replace(' ', '-')}`}>
-                            {deliverable.status}
-                          </span>
-                          <span className="deliverable-due">{deliverable.due}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <h3>Recent Activity</h3>
-                    <div className="activity-feed">
-                      <div className="activity-item">
-                        <span className="activity-icon">📝</span>
-                        <div className="activity-content">
-                          <p>Floor plans updated</p>
-                          <span className="activity-time">2 hours ago</span>
-                        </div>
-                      </div>
-                      <div className="activity-item">
-                        <span className="activity-icon">💬</span>
-                        <div className="activity-content">
-                          <p>Client feedback received</p>
-                          <span className="activity-time">1 day ago</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </>
+
+      <div className="planner-header">
+        <h1>Studio Projects</h1>
+        <div className="planner-controls">
+          <input
+            type="text"
+            placeholder="Search projects or clients..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Statuses</option>
+            {statuses.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Types</option>
+            {types.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <button className="btn-primary">+ New Project</button>
+        </div>
+      </div>
+
+      <div className="projects-grid">
+        {filteredProjects.map((project) => (
+          <div
+            key={project.id}
+            className="project-card"
+            onClick={() => openProjectModal(project)}
+          >
+            {/* Client and Type */}
+            <div className="card-client-type">
+              <span className="client-name">{project.client.name}</span>
+              <span className={`project-type-badge ${project.type.toLowerCase()}`}>
+                {project.type}
+              </span>
+            </div>
+
+            {/* Project Name */}
+            <h3 className="project-name">{project.name}</h3>
+
+            {/* Status */}
+            <div className="card-status">
+              <span className="status-label">STATUS</span>
+              <span className={`status-badge ${project.status.replace(/\s/g, "-").toLowerCase()}`}>
+                {project.status}
+              </span>
+            </div>
+
+            {/* Progress */}
+            <div className="card-progress">
+              <span className="progress-label">PROGRESS</span>
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: `${project.progress}%` }}
+                ></div>
+              </div>
+              <span className="progress-text">{project.progress}%</span>
+            </div>
+
+            {/* Timeline */}
+            <div className="card-timeline">
+              <span className="timeline-label">TIMELINE</span>
+              <span>{project.timeline.start} → {project.timeline.end}</span>
+            </div>
+
+            {/* Team */}
+            <div className="card-team">
+              <span className="team-label">TEAM</span>
+              <span>{project.team.join(", ")}</span>
+            </div>
+
+            {/* Budget */}
+            <div className="card-budget">
+              <span className="budget-label">BUDGET</span>
+              <span>${project.budget.spent.toLocaleString()} / ${project.budget.total.toLocaleString()}</span>
+            </div>
+
+            {/* Deliverables (simplified) */}
+            <div className="card-deliverables">
+              <span className="deliverables-label">DELIVERABLES</span>
+              <span>{project.deliverables.slice(0, 2).join(" • ")}
+                {project.deliverables.length > 2 && " • ..."}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Project Modal */}
+      {selectedProject && (
+        <div className="modal-overlay" onClick={closeProjectModal}>
+          <div className="project-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div>
+                <h2>{selectedProject.name}</h2>
+                <span className="modal-client">
+                  {selectedProject.client.name} • {selectedProject.type}
+                </span>
+              </div>
+              <button className="close-btn" onClick={closeProjectModal}>×</button>
+            </div>
+
+            <div className="modal-body">
+              <div className="modal-section">
+                <h4>Client Information</h4>
+                <p><strong>Email:</strong> {selectedProject.client.email}</p>
+                <p><strong>Phone:</strong> {selectedProject.client.phone}</p>
+              </div>
+
+              <div className="modal-section">
+                <h4>Project Details</h4>
+                <p><strong>Status:</strong> {selectedProject.status}</p>
+                <p><strong>Progress:</strong> {selectedProject.progress}%</p>
+                <p><strong>Timeline:</strong> {selectedProject.timeline.start} → {selectedProject.timeline.end}</p>
+                <p><strong>Team:</strong> {selectedProject.team.join(", ")}</p>
+              </div>
+
+              <div className="modal-section">
+                <h4>Budget</h4>
+                <p><strong>Total:</strong> ${selectedProject.budget.total.toLocaleString()}</p>
+                <p><strong>Spent:</strong> ${selectedProject.budget.spent.toLocaleString()}</p>
+                <p><strong>Remaining:</strong> ${(selectedProject.budget.total - selectedProject.budget.spent).toLocaleString()}</p>
+              </div>
+
+              <div className="modal-section">
+                <h4>Deliverables</h4>
+                <ul className="deliverables-list">
+                  {selectedProject.deliverables.map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="modal-section">
+                <h4>Milestones</h4>
+                <div className="milestones">
+                  {selectedProject.milestones.map((ms, idx) => (
+                    <div key={idx} className="milestone-item">
+                      <span className={`milestone-status ${ms.completed ? "completed" : "pending"}`}>
+                        {ms.completed ? "✓" : "○"}
+                      </span>
+                      <span className="milestone-name">{ms.name}</span>
+                      <span className="milestone-due">Due: {ms.due}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

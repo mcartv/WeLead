@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  Outlet,
 } from "react-router-dom";
 
 import Login from "./components/Login";
@@ -13,18 +14,20 @@ import PortfolioCards from "./components/PortfolioCards";
 import Planner from "./components/Planner";
 import Dashboard from "./components/Dashboard";
 import Form from "./components/Form";
-import ProjectTracker from './components/ProjectTracker';
+import ProjectTracker from "./components/ProjectTracker";
 import Layout from "./components/Layout";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import ForgotPassword from "./components/ForgotPassword";
-import AdminArea from './components/AdminArea';
-import AdminReviewManagement from './components/AdminReviewManagement';
-import AdminPanel from './components/AdminPanel';
-import AdminPortfolioGallery from './components/AdminPortfolioGallery';
+import AdminReviewManagement from "./components/AdminReviewManagement";
+import AdminPanel from "./components/AdminPanel";
+import AdminPortfolioGallery from "./components/AdminPortfolioGallery";
 import Settings from "./components/Settings";
 import ControlPanel from "./components/ControlPanel";
 import Profile from "./components/Profile";
+import PaymentSchedulingForm from "./components/PaymentSchedulingForm";
+import InquiryManagement from "./components/InquiryManagement";
+import SchedulingManagement from "./components/SchedulingManagement";
 
 function App() {
   const [user, setUser] = useState(null); // Logged-in user state
@@ -37,7 +40,17 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    window.location.href = "/"; // optional, could just navigate without reload
+    window.location.href = "/";
+  };
+
+  // Wrapper for protected routes
+  const ProtectedRoute = ({ children }) => {
+    return user ? children : <Navigate to="/login" />;
+  };
+
+  // Wrapper for admin-only routes
+  const AdminRoute = ({ children }) => {
+    return user?.role === "admin" ? children : <Navigate to="/home" />;
   };
 
   return (
@@ -51,65 +64,81 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected routes with Layout */}
+        {/* Protected routes */}
         <Route
-          element={user ? <Layout handleLogout={handleLogout} user={user} /> : <Navigate to="/login" />}
+          element={
+            <ProtectedRoute>
+              <Layout user={user} handleLogout={handleLogout}>
+                <Outlet />
+              </Layout>
+            </ProtectedRoute>
+          }
         >
           <Route path="/home" element={<Home sectionRefs={sectionRefs} introRef={introRef} user={user} />} />
           <Route path="/planner" element={<Planner user={user} handleLogout={handleLogout} />} />
           <Route path="/form" element={<Form user={user} handleLogout={handleLogout} />} />
-          <Route path="/ProjectTracker" element={<ProjectTracker user={user} />} />
+          <Route path="/schedule-payment" element={<PaymentSchedulingForm user={user} handleLogout={handleLogout} />} />
+          <Route path="/ProjectTracker" element={<ProjectTracker user={user} handleLogout={handleLogout} />} />
+          <Route path="/profile" element={<Profile user={user} handleLogout={handleLogout} />} />
+          <Route path="/settings" element={<Settings user={user} handleLogout={handleLogout} />} />
 
           {/* Admin-only routes */}
           <Route
             path="/dashboard"
             element={
-              user?.role === "admin"
-                ? <Dashboard user={user} handleLogout={handleLogout} />
-                : <Navigate to="/home" />
+              <AdminRoute>
+                <Dashboard user={user} handleLogout={handleLogout} />
+              </AdminRoute>
             }
           />
           <Route
             path="/admin-review"
-            element={<AdminReviewManagement user={user} handleLogout={handleLogout} />}
+            element={
+              <AdminRoute>
+                <AdminReviewManagement user={user} handleLogout={handleLogout} />
+              </AdminRoute>
+            }
           />
-
           <Route
             path="/admin-panel"
-            element={<AdminPanel user={user} handleLogout={handleLogout} />}
+            element={
+              <AdminRoute>
+                <AdminPanel user={user} handleLogout={handleLogout} />
+              </AdminRoute>
+            }
           />
-
           <Route
             path="/admin-portfolio"
-            element={<AdminPortfolioGallery user={user} handleLogout={handleLogout} />}
-          />
-
-          <Route
-            path="/settings"
-            element={<Settings user={user} handleLogout={handleLogout} />}
+            element={
+              <AdminRoute>
+                <AdminPortfolioGallery user={user} handleLogout={handleLogout} />
+              </AdminRoute>
+            }
           />
           <Route
             path="/controlpanel"
             element={
-              user?.role === "admin"
-                ? <ControlPanel user={user} handleLogout={handleLogout} />
-                : <Navigate to="/home" />
+              <AdminRoute>
+                <ControlPanel user={user} handleLogout={handleLogout} />
+              </AdminRoute>
             }
           />
           <Route
-            path="/ProjectTracker"
+            path="/inquiry-management"
             element={
-              user?.role === "admin" ? (
-                <ProjectTracker user={user} handleLogout={handleLogout} />
-              ) : (
-                <Navigate to="/home" />
-              )
+              <AdminRoute>
+                <InquiryManagement user={user} />
+              </AdminRoute>
             }
           />
-
+          {/* Add Scheduling route here */}
           <Route
-            path="/profile"
-            element={<Profile user={user} handleLogout={handleLogout} />}
+            path="/scheduling"
+            element={
+              <AdminRoute>
+                <SchedulingManagement />
+              </AdminRoute>
+            }
           />
         </Route>
 

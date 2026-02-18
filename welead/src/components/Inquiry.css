@@ -1,0 +1,176 @@
+/* inquiry.css */
+.inquiry-container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 32px;
+  font-family: Arial, sans-serif;
+}
+
+.shift-right {
+  margin-left: 250px; /* Adjust this value to match your sidebar width */
+}
+
+.inquiry-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+/* Dashboard */
+.inquiry-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.metric-card.pending {
+  background-color: #fef3c7;
+}
+
+.metric-card.approved {
+  background-color: #d1fae5;
+}
+
+.metric-card.converted {
+  background-color: #dbeafe;
+}
+
+.metric-card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.metric-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Table */
+.inquiry-table-container {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.inquiry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inquiry-table th,
+.inquiry-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.inquiry-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.inquiry-row {
+  cursor: pointer;
+}
+
+.inquiry-row:hover {
+  background-color: #f9fafb;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.action-btn.approve {
+  background-color: #10b981;
+}
+
+.action-btn.reject {
+  background-color: #ef4444;
+}
+
+.action-btn.convert {
+  background-color: #3b82f6;
+}
+
+/* Modal */
+.inquiry-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inquiry-modal {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 512px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.inquiry-modal h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.inquiry-textarea,
+.inquiry-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  margin-top: 16px;
+  box-sizing: border-box;
+}
+
+.modal-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 8px;
+}
+
+.modal-btn {
+  background-color: #3b82f6;
+}
+
+.modal-btn.schedule {
+  background-color: #8b5cf6;
+}
+
+.modal-btn.fee {
+  background-color: #f59e0b;
+}
+
+.modal-btn.close {
+  background-color: #6b7280;
+}

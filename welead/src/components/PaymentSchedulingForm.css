@@ -1,0 +1,201 @@
+/* Container – no sidebar, just a centered card */
+.psf-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+/* Headers */
+.psf-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: -0.02em;
+}
+
+.psf-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Step indicator */
+.psf-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.psf-step-active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 4px;
+}
+
+.psf-step-inactive {
+  color: #9ca3af;
+}
+
+.psf-step-separator {
+  color: #d1d5db;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* Form layout */
+.psf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.psf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.psf-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.psf-required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+.psf-optional {
+  color: #9ca3af;
+  font-weight: 400;
+  text-transform: lowercase;
+  font-size: 0.8rem;
+}
+
+/* Inputs, selects, textarea */
+.psf-select,
+.psf-input,
+.psf-textarea {
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: white;
+  transition: border 0.15s, box-shadow 0.15s;
+}
+
+.psf-select:focus,
+.psf-input:focus,
+.psf-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.psf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.psf-hint {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.psf-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Note under payment step */
+.psf-note {
+  background: #f3f4f6;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1f2937;
+  text-align: center;
+  letter-spacing: 0.3px;
+  border-left: 3px solid #2563eb;
+}
+
+/* Buttons */
+.psf-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.psf-button {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.psf-button-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.psf-button-primary:hover {
+  background: #1d4ed8;
+  transform: scale(1.01);
+}
+
+.psf-button-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.psf-button-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Remove any leftover sidebar artifacts */
+body {
+  background: #f9fafb; /* subtle background to make card pop */
+  margin: 0;
+  padding: 0;
+}
+
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar-container {
+  flex: 0 0 250px; /* Sidebar width */
+}
+
+.content-area {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9; /* optional */
+}
